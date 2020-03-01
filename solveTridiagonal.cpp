@@ -20,8 +20,8 @@ Returns the B-spline coefficients.
   // Elimination stage
   for(int i=1; i<=n; i++)
   {
-    d[i] = d[i] - u[i-1]*(l[i]/d[i-1]);
-    fvec[i] = fvec[i] - fvec[i-1]*(l[i]/d[i-1]);
+    d[i] = d[i] - u[i-1]*(l[i-1]/d[i-1]);
+    fvec[i] = fvec[i] - fvec[i-1]*(l[i-1]/d[i-1]);
   }
 
   //Backsolve
@@ -54,8 +54,8 @@ Exercise 3, Section 2.6, Epperson 2013
 
 
   l = new double[n+1];
-  l[1] = 2.0;
-  l[2] = l[3] = 1.0;
+  l[0] = 2.0;
+  l[1] = l[2] = 1.0;
 
   fvec = new double[n+1];
   fvec[0] = 8.0;
