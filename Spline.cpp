@@ -12,10 +12,10 @@ Spline::Spline(const double len, const int n, AbstractFunction& aFunction) {
 
   mFvec = new double[n+1];
   mDiag = new double[n+1];
-  mUpper = new double[n+1];
-  mLower = new double[n+1];
+  mUpper = new double[n];
+  mLower = new double[n];
 
-  mFunction = aFunction;
+  mFunction = &aFunction;
 
 }
 
@@ -37,16 +37,16 @@ void Spline::Nodes() {
 
 // Finds system of equations for spline
 void Spline::FindSystem() {
-  /*for (int i=1; i<n; i++) {
-    mFvec[i]=(*funct)(x[i]);
+  for (int i=1; i<mN; i++) {
+    mFvec[i]=(*mFunction).evaluateF(mNodes[i]);
   }
-  mFvec[0]=(*funct)(x[0])+((double(1)/double(3))*h*(*derivative)(x[0]));
-  mFvec[n]=(*funct)(x[n])-((double(1)/double(3))*h*(*derivative)(x[n]));
-  */
+  mFvec[0]=(*mFunction).evaluateF(mNodes[0])+((double(1)/double(3))*mH*(*mFunction).derivative(mNodes[0]));
+  mFvec[mN]=(*mFunction).evaluateF(mNodes[mN])-((double(1)/double(3))*mH*(*mFunction).derivative(mNodes[mN]));
+
 }
 
 
 
 double Spline::GetLength() {
-  return mLen;
+  return mFvec[0];
 }

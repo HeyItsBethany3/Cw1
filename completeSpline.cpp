@@ -34,7 +34,7 @@ double (*derivative)(const double x), double *d, double *u, double *l, double *f
   }
 
   // Create f(x) using function pointers
-  fvec = new double[n+1];
+
   for (int i=1; i<n; i++) {
     fvec[i]=(*funct)(x[i]);
   }
@@ -44,22 +44,22 @@ double (*derivative)(const double x), double *d, double *u, double *l, double *f
 
 
   // Find diagonal elements
-  d = new double[n+1];
+
   for (int i=0; i<=n; i++) {
     d[i] = 4;
   }
 
   // Construct upper diagonal elements
-  u = new double[n+1];
+
   u[0]=2;
-  for (int i=1; i<=n; i++) {
+  for (int i=1; i<n; i++) {
     u[i]=1;
   }
 
   // Construct lower diagonal elements
-  l = new double[n+1];
-  l[n]=2;
-  for (int i=0; i<n; i++) {
+
+  l[n-1]=2;
+  for (int i=0; i<n-1; i++) {
     l[i]=1;
   }
 
@@ -71,7 +71,27 @@ double (*derivative)(const double x), double *d, double *u, double *l, double *f
 int main(int argc, char* argv[]) {
 
   double *fvec, *d, *u, *l;
-  findSpline(10, 5, f, fD, d, u, l, fvec);
+  int n=8;
+  fvec = new double[n+1];
+  d = new double[n+1];
+  u = new double[n];
+  l = new double[n];
+  findSpline(2, n, f, fD, d, u, l, fvec);
+
+  // Output d, u, l
+  std::cout << "\nd: ";
+  for (int i=0; i<n+1; i++) {
+    std::cout << d[i] << " ";
+  }
+  std::cout << "\nu: ";
+  for (int i=0; i<n; i++) {
+    std::cout << u[i] << " ";
+  }
+  std::cout << "\nl: ";
+  for (int i=0; i<n; i++) {
+    std::cout << l[i] << " ";
+  }
+
 
 
   delete[] fvec;
