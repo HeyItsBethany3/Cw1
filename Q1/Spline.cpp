@@ -67,12 +67,15 @@ void Spline::FindSystem() {
 
 void Spline::solveTridiaognal() {
 
+  //Create delta and Gvec vectors of the Triangular system
   double *delta, *Gvec;
   delta = new double[mN+1];
   Gvec = new double[mN+1];
-
-  delta = mDiag;
-  Gvec = mFvec;
+  for(int i=0; i<=mN; i++)
+  {
+  delta[i] = mDiag[i];
+  Gvec[i] = mFvec[i];
+  }
 
   // Elimination stage
   for(int i=1; i<=mN; i++)
