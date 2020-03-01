@@ -8,7 +8,8 @@ int main(int argc, char* argv[]) {
   Function1* f1 = new Function1();
   Spline* s1 = new Spline(10,5,*f1);
   (*s1).Nodes();
-  std::cout << "Length " << (*s1).GetLength()<< std::endl;
+  (*s1).FindSystem();
+  (*s1).showVectors();
 
   delete f1;
   delete s1;

@@ -21,6 +21,9 @@ class Spline {
     // Find system of equations
     void FindSystem();
 
+    // Shows system of equations
+    void showVectors();
+
   protected:
 
     double mLen; // Interval is (0, mLen)
@@ -32,6 +35,7 @@ class Spline {
     double *mDiag;
     double *mUpper;
     double *mLower;
+
 
     AbstractFunction* mFunction;
 
