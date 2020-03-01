@@ -28,6 +28,7 @@ Spline::~Spline() {
   delete mDiag;
   delete mUpper;
   delete mLower;
+  delete mCoeff;
 }
 
 // Constructs interpolating nodes
@@ -65,19 +66,33 @@ void Spline::FindSystem() {
 }
 
 void Spline::solveTridiaognal() {
+
+  //Create delta and Gvec vectors of the Triangular system
+  double *delta, *Gvec;
+  delta = new double[mN+1];
+  Gvec = new double[mN+1];
+  for(int i=0; i<=mN; i++)
+  {
+  delta[i] = mDiag[i];
+  Gvec[i] = mFvec[i];
+  }
+
   // Elimination stage
   for(int i=1; i<=mN; i++)
   {
-    mDiag[i] = mDiag[i] - mUpper[i-1]*(mLower[i-1]/mDiag[i-1]);
-    mFvec[i] = mFvec[i] - mFvec[i-1]*(mLower[i-1]/mDiag[i-1]);
+    delta[i] = delta[i] - mUpper[i-1]*(mLower[i-1]/delta[i-1]);
+    Gvec[i] = Gvec[i] - Gvec[i-1]*(mLower[i-1]/delta[i-1]);
   }
 
   //Backsolve
-  mCoeff[mN] = mFvec[mN]/mDiag[mN];
+  mCoeff[mN] = Gvec[mN]/delta[mN];
   for(int i=mN-1; i>=0; i--)
   {
-    mCoeff[i] = ( mFvec[i] - mUpper[i]*mCoeff[i+1] )/mDiag[i];
+    mCoeff[i] = ( Gvec[i] - mUpper[i]*mCoeff[i+1] )/delta[i];
   }
+
+  delete[] delta;
+  delete[] Gvec;
 }
 
 
