@@ -9,7 +9,11 @@ int main(int argc, char* argv[]) {
   Spline* s1 = new Spline(10,5,*f1);
   (*s1).Nodes();
   (*s1).FindSystem();
-  (*s1).showVectors();
+  (*s1).showSystem();
+
+  (*s1).solveTridiaognal();
+  (*s1).showCoeff();
+
 
   delete f1;
   delete s1;

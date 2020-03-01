@@ -15,6 +15,7 @@ Spline::Spline(const double len, const int n, AbstractFunction& aFunction) {
   mDiag = new double[n+1];
   mUpper = new double[n];
   mLower = new double[n];
+  mCoeff = new double[n+1];
 
   mFunction = &aFunction;
 
@@ -63,13 +64,24 @@ void Spline::FindSystem() {
 
 }
 
+void Spline::solveTridiaognal() {
+  // Elimination stage
+  for(int i=1; i<=mN; i++)
+  {
+    mDiag[i] = mDiag[i] - mUpper[i-1]*(mLower[i-1]/mDiag[i-1]);
+    mFvec[i] = mFvec[i] - mFvec[i-1]*(mLower[i-1]/mDiag[i-1]);
+  }
 
-
-double Spline::GetLength() {
-  return mFvec[0];
+  //Backsolve
+  mCoeff[mN] = mFvec[mN]/mDiag[mN];
+  for(int i=mN-1; i>=0; i--)
+  {
+    mCoeff[i] = ( mFvec[i] - mUpper[i]*mCoeff[i+1] )/mDiag[i];
+  }
 }
 
-void Spline::showVectors() {
+
+void Spline::showSystem() {
   std::cout << "\nF(x): ";
   for (int i=0; i<=mN; i++) {
     std::cout << mFvec[i] << " ";
@@ -91,6 +103,11 @@ void Spline::showVectors() {
     std::cout << mLower[i] << " ";
   }
 
+}
 
-
+void Spline::showCoeff() {
+  std::cout << "\nc: ";
+  for (int i=0; i<mN+1; i++) {
+    std::cout << mCoeff[i] << " ";
+  }
 }

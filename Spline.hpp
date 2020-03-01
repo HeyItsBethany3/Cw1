@@ -12,9 +12,6 @@ class Spline {
     // Destructor
     ~Spline();
 
-    // Get length
-    double GetLength();
-
     // Construct nodes
     void Nodes();
 
@@ -22,7 +19,13 @@ class Spline {
     void FindSystem();
 
     // Shows system of equations
-    void showVectors();
+    void showSystem();
+
+    // Solves system of equations (finds coefficients of spline)
+    void solveTridiaognal();
+
+    // shows coefficients of spline
+    void showCoeff();
 
   protected:
 
@@ -36,6 +39,7 @@ class Spline {
     double *mUpper;
     double *mLower;
 
+    double *mCoeff;
 
     AbstractFunction* mFunction;
 
