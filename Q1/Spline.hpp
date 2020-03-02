@@ -12,10 +12,10 @@ class Spline {
     // Destructor
     ~Spline();
 
-    // Construct nodes
+    // Constructs nodes
     void Nodes();
 
-    // Find system of equations
+    // Finds system of equations
     void FindSystem();
 
     // Shows system of equations
@@ -24,27 +24,25 @@ class Spline {
     // Solves system of equations (finds coefficients of spline)
     void solveTridiaognal();
 
-    // shows coefficients of spline
+    // Shows coefficients of spline
     void showCoeff();
 
   protected:
 
     double mLen; // Interval is (0, mLen)
-    int mN; // n+1 interpolating nodes
-    double *mNodes; // x nodes
-    double mH;
+    int mN; // mN+1 interpolating nodes
+    double *mNodes;
+    double mH; // Distance between nodes
 
-    double *mFvec;
-    double *mDiag;
-    double *mUpper;
-    double *mLower;
+    double *mFvec; // f(x) at all nodes x
+    double *mDiag; // Diagonal
+    double *mUpper; // Upper diagonal
+    double *mLower; // Lower diagonal
 
-    double *mCoeff;
+    double *mCoeff; // Spline coefficients
 
-    AbstractFunction* mFunction;
-
+    AbstractFunction* mFunction; // Function pointer to f
 
 };
-
 
 #endif
