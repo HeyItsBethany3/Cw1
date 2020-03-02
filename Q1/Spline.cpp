@@ -108,11 +108,57 @@ void Spline::solveTridiaognal() {
   delete[] Gvec;
 }
 
+
+
 // Evaluate spline at point x
 double Spline::evaluateSpline(const double x) {
 
   int k = int(floor((x-mNodes[0])/mH)+1);
-  return mCoeff[k-1]+(4*mCoeff[k])+mCoeff[k+1];
+
+  double* testX;
+  testX = new double[4];
+  testX[0] =  mNodes[k-1]-mH;
+  testX[1] =  mNodes[k-1];
+  testX[2] =  mNodes[k];
+  testX[3] =  mNodes[k]+mH;
+
+  double sum = 0;
+  double B;
+  for (int i=0; i<4; i++) {
+    double xstar = (x-testX[i])/mH;
+    if ((xstar<=-2)||(xstar>=2)) {
+      B = 0;
+    } else if (xstar <= -1) {
+      B = pow(xstar+2, 3);
+    } else if (xstar >= 1) {
+      B = pow(2-x, 3);
+    } else if (xstar <= 0) {
+      B = 1+3*(xstar+1) + 3*pow(xstar+1, 2) - 3*pow(xstar+1,3);
+    } else {
+      B = 1+3*(1-xstar) + 3*pow(1-xstar, 2) - 3*pow(1-xstar,3);
+    }
+
+    // Boundary cases
+    if ((i==0) and (testX[1]<10e-10)){
+      double c1 = mCoeff[1]-(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[0]);
+      sum += c1*B;
+    }
+    else if ((i==3) and (testX[2]-mLen<10e-10)) {
+      double c2 = mCoeff[mN-1]+(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[mN]);
+      sum += c2*B;
+    }
+    else {
+      sum += mCoeff[k-2+i]*B;
+    }
+
+  }
+
+  // Doesn't work for boundary cases
+
+
+  delete[] testX;
+  return sum;
+
 }
 
 // Displays system to solve

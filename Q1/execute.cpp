@@ -27,6 +27,9 @@ int main(int argc, char* argv[]) {
   std::cout << "\nSpline at x=0.9 is " << (*s1).evaluateSpline(0.9);
   std::cout << "\nf(0.9) is " << (*f1).evaluateF(0.9) << std::endl;
 
+  std::cout << "\nSpline at x=0.1 is " << (*s1).evaluateSpline(0.1);
+  std::cout << "\nf(0.1) is " << (*f1).evaluateF(0.1) << std::endl;
+
   delete f1;
   delete s1;
 
