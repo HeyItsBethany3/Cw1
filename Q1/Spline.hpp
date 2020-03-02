@@ -27,6 +27,9 @@ class Spline {
     // Shows coefficients of spline
     void showCoeff();
 
+    // Evaluate spline at x
+    double evaluateSpline(const double x);
+
   protected:
 
     double mLen; // Interval is (0, mLen)
