@@ -2,6 +2,8 @@
 #include "AbstractFunction.hpp"
 #include<iostream>
 #include<cassert>
+#include<cmath>
+
 
 // Constructor
 Spline::Spline(const double len, const int n, AbstractFunction& aFunction) {
@@ -104,6 +106,13 @@ void Spline::solveTridiaognal() {
   // Deallocates storage
   delete[] delta;
   delete[] Gvec;
+}
+
+// Evaluate spline at point x
+double Spline::evaluateSpline(const double x) {
+
+  int k = int(floor((x-mNodes[0])/mH)+1);
+  return mCoeff[k-1]+(4*mCoeff[k])+mCoeff[k+1];
 }
 
 // Displays system to solve
