@@ -12,6 +12,8 @@ class AbstractFunction {
     // Destructor
     virtual ~AbstractFunction() = 0;
 
+    // comment
+
 };
 
 #endif
