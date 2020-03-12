@@ -15,6 +15,7 @@ Spline::Spline(const double len, const int n, AbstractFunction& aFunction) {
   mLen = len; // spline interval is [0,len]
   mN = n; // n+1 interpolating points
   mNodes = new double[n+1]; // stores interpolation points
+  mFullNodes = new double[n+3];
   mH = len/double(n); // distance between nodes
 
   mFvec = new double[n+1]; // f values at each node
@@ -22,6 +23,7 @@ Spline::Spline(const double len, const int n, AbstractFunction& aFunction) {
   mUpper = new double[n]; // upper diaagonal vector
   mLower = new double[n]; // lower diagonal vector
   mCoeff = new double[n+1]; // coefficients of spline
+  mFullC = new double[n+3];
 
   mFunction = &aFunction; // f function for nodes to be evaluated at
 
@@ -36,6 +38,8 @@ Spline::~Spline() {
   delete mUpper;
   delete mLower;
   delete mCoeff;
+  delete mFullC;
+  delete mFullNodes;
 }
 
 // Constructs interpolating nodes
@@ -43,6 +47,14 @@ void Spline::Nodes() {
   for (int i=0; i<mN+1; i++) {
     mNodes[i] = i*mH;
   }
+
+  for (int i=1; i<mN+2; i++) {
+    mFullNodes[i] = (i-1)*mH;
+  }
+  mFullNodes[0] = -mH;
+
+  mFullNodes[mN+2] = mLen +mH;
+
 }
 
 // Finds system of equations for spline
@@ -54,8 +66,8 @@ void Spline::FindSystem() {
   for (int i=1; i<mN; i++) {
     mFvec[i]=(*mFunction).evaluateF(mNodes[i]);
   }
-  mFvec[0]=(*mFunction).evaluateF(mNodes[0])+((double(1)/double(3))*mH*(*mFunction).derivative(mNodes[0]));
-  mFvec[mN]=(*mFunction).evaluateF(mNodes[mN])-((double(1)/double(3))*mH*(*mFunction).derivative(mNodes[mN]));
+  mFvec[0]=(*mFunction).evaluateF(mNodes[0])+(((double(1)/double(3))*mH*(*mFunction).derivative(mNodes[0])));
+  mFvec[mN]=(*mFunction).evaluateF(mNodes[mN])-(((double(1)/double(3))*mH*(*mFunction).derivative(mNodes[mN])));
 
   // Find diagonal elements of A
   for (int i=0; i<=mN; i++) {
@@ -94,71 +106,59 @@ void Spline::solveTridiaognal() {
   {
     delta[i] = delta[i] - mUpper[i-1]*(mLower[i-1]/delta[i-1]);
     Gvec[i] = Gvec[i] - Gvec[i-1]*(mLower[i-1]/delta[i-1]);
+
   }
 
   //Backsolve
   mCoeff[mN] = Gvec[mN]/delta[mN];
+  mFullC[mN+1]=mCoeff[mN];
   for(int i=mN-1; i>=0; i--)
   {
     mCoeff[i] = ( Gvec[i] - mUpper[i]*mCoeff[i+1] )/delta[i];
+    mFullC[i+1] = mCoeff[i];
   }
+  mFullC[0] = mCoeff[1]-(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[0]);
+  mFullC[mN+2] =mCoeff[mN-1]+(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[mN]);
+
 
   // Deallocates storage
   delete[] delta;
   delete[] Gvec;
 }
 
+void Spline::solveMethod2() {
 
+  std::cout << "Not implemented yet!";
+
+}
+
+double Spline::evaluateB(const double xstar) {
+  double B;
+  if ((xstar <= -1)&&(xstar>=-2)) {
+    B = pow((xstar+2), 3);
+  } else if ((xstar >= 1)&&(xstar <=2)) {
+    B = pow((2-xstar), 3);
+  } else if ((xstar <= 0)&&(xstar>=-1)) {
+    B = 1+(3*(xstar+1)) + (3*pow(xstar+1, 2)) - (3*pow(xstar+1,3));
+  } else if ((xstar >= 0)&&(xstar <=1)) {
+    B = 1+(3*(1-xstar)) + (3*pow(1-xstar, 2)) - (3*pow(1-xstar,3));
+  } else {
+    B = 0;
+  }
+  return B;
+}
 
 // Evaluate spline at point x
 double Spline::evaluateSpline(const double x) {
-
-  int k = int(floor((x-mNodes[0])/mH)+1);
-
-  double* testX;
-  testX = new double[4];
-  testX[0] =  mNodes[k-1]-mH;
-  testX[1] =  mNodes[k-1];
-  testX[2] =  mNodes[k];
-  testX[3] =  mNodes[k]+mH;
-
   double sum = 0;
-  double B;
-  for (int i=0; i<4; i++) {
-    double xstar = (x-testX[i])/mH;
-    if ((xstar<=-2)||(xstar>=2)) {
-      B = 0;
-    } else if (xstar <= -1) {
-      B = pow(xstar+2, 3);
-    } else if (xstar >= 1) {
-      B = pow(2-x, 3);
-    } else if (xstar <= 0) {
-      B = 1+3*(xstar+1) + 3*pow(xstar+1, 2) - 3*pow(xstar+1,3);
-    } else {
-      B = 1+3*(1-xstar) + 3*pow(1-xstar, 2) - 3*pow(1-xstar,3);
-    }
+  double xstar;
 
-    // Boundary cases
-    if ((i==0) and (testX[1]<10e-10)){
-      double c1 = mCoeff[1]-(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[0]);
-      sum += c1*B;
-    }
-    else if ((i==3) and (testX[2]-mLen<10e-10)) {
-      double c2 = mCoeff[mN-1]+(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[mN]);
-      sum += c2*B;
-    }
-    else {
-      sum += mCoeff[k-2+i]*B;
-    }
-
+  for(int i=0; i<=mN+2; i++) {
+    xstar = (x-mFullNodes[i])/double(mH);
+    sum = sum +(mFullC[i]*Spline::evaluateB(xstar));
   }
 
-  // Doesn't work for boundary cases
-
-
-  delete[] testX;
   return sum;
-
 }
 
 // Displays system to solve
@@ -192,4 +192,16 @@ void Spline::showCoeff() {
   for (int i=0; i<mN+1; i++) {
     std::cout << mCoeff[i] << " ";
   }
+}
+
+
+double Spline::error(const double x) {
+  double approx = Spline::evaluateSpline(x);
+  double f = (*mFunction).evaluateF(x);
+  return fabs(approx-f);
+}
+
+void Spline::changeParameters(const double len, const int n) {
+  mLen = len;
+  mN = n;
 }

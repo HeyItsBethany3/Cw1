@@ -22,7 +22,11 @@ class Spline {
     void showSystem();
 
     // Solves system of equations (finds coefficients of spline)
-    void solveTridiaognal();
+    void solveTridiaognal(); // - Britta
+
+    void solveMethod2(); // - Ioanna
+
+    double evaluateB(const double xstar); // Finds B
 
     // Shows coefficients of spline
     void showCoeff();
@@ -30,11 +34,20 @@ class Spline {
     // Evaluate spline at x
     double evaluateSpline(const double x);
 
+
+    // Find absolute error of spline approximation to f at point x
+    double error(const double x);
+
+    // Change len and n parameters in spline
+    void changeParameters(const double len, const int n);
+
+
   protected:
 
     double mLen; // Interval is (0, mLen)
     int mN; // mN+1 interpolating nodes
     double *mNodes;
+    double *mFullNodes; //complete set of nodes
     double mH; // Distance between nodes
 
     double *mFvec; // f(x) at all nodes x
@@ -43,6 +56,7 @@ class Spline {
     double *mLower; // Lower diagonal
 
     double *mCoeff; // Spline coefficients
+    double *mFullC; // All spline coefficients
 
     AbstractFunction* mFunction; // Function pointer to f
 
