@@ -38,8 +38,7 @@ class Spline {
     // Find absolute error of spline approximation to f at point x
     double error(const double x);
 
-    // Change len and n parameters in spline
-    void changeParameters(const double len, const int n);
+
 
 
   protected:

@@ -200,8 +200,3 @@ double Spline::error(const double x) {
   double f = (*mFunction).evaluateF(x);
   return fabs(approx-f);
 }
-
-void Spline::changeParameters(const double len, const int n) {
-  mLen = len;
-  mN = n;
-}
