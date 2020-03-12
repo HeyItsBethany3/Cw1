@@ -13,8 +13,8 @@ double* solve_Tridiagonal(const int n, double *l, double *d, double *u, double *
     // elimination step
     for(int i=1; i<=n; i++)
         {
-            d[i] -= u[i-1] * (l[i] / d[i-1]);
-            f[i] -= f[i-1] * (l[i] / d[i-1]);
+            d[i] -= u[i-1] * (l[i-1] / d[i-1]);
+            f[i] -= f[i-1] * (l[i-1] / d[i-1]);
             if(d[i] == 0)
             {
                 flag = 'f';
@@ -40,17 +40,17 @@ double* solve_Tridiagonal(const int n, double *l, double *d, double *u, double *
     }
 }
 
-// function to test with exercise 3
+// function to test using exercise 3
 void test(double *l, double *d, double *u, double *f, char &flag)
 {
     int n = 3;
     double* solution;
 
     l = new double[n+1];
-    l[0] = 0.0;
-    l[1] = 2.0;
+    l[0] = 2.0;
+    l[1] = 1.0;
     l[2] = 1.0;
-    l[3] = 1.0;
+    l[3] = 0.0;
 
     d = new double[n+1];
     d[0] = 6.0;
