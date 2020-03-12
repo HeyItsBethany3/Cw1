@@ -48,7 +48,7 @@ double LSQ::Gauss3(double (*P_function)(const double x))
   return sum;
 }
 
-
+/*
 double LSQ::Gauss5(double (*P_function)(const double x)) {
   double sum = (double(128)/double(225))*(*mFunction).evaluateF(0)*(*P_function)(0);
   double xVal = (double(1)/double(3))*sqrt(5.0-(2.0*sqrt(double(10)/double(7))));
@@ -58,7 +58,7 @@ double LSQ::Gauss5(double (*P_function)(const double x)) {
   sum += w1*((*mFunction).evaluateF(xVal)*(*P_function)(xVal)+(*mFunction).evaluateF(-xVal)*(*P_function)(-xVal));
   sum += w2*((*mFunction).evaluateF(xVal2)*(*P_function)(xVal2)+(*mFunction).evaluateF(-xVal2)*(*P_function)(-xVal2));
   return sum;
-}
+}*/
 
 // Find B using gauss3 formula
 void LSQ::findBGauss3() {
@@ -68,10 +68,11 @@ void LSQ::findBGauss3() {
   bArray[3] = LSQ::Gauss3(LSQ::phi_4);
 }
 
+/*
 // Find B using gauss5 formula
 void LSQ::findBGauss5() {
   bArray[0] = LSQ::Gauss5(LSQ::phi_1);
   bArray[1] = LSQ::Gauss5(LSQ::phi_2);
   bArray[2] = LSQ::Gauss5(LSQ::phi_3);
   bArray[3] = LSQ::Gauss5(LSQ::phi_4);
-}
+}*/

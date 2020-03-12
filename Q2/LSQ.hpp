@@ -24,13 +24,13 @@ public:
 
   // Find b values
   void findBGauss3();
-  void findBGauss5()
+  //void findBGauss5();
 
   // Find 3-pont Gaussian approximation on interval [-1,1] given function f
   double Gauss3(double (*P_function)(const double x));
 
   // Find 5-pont Gaussian approximation on interval [-1,1] given function f
-  double Gauss5(double (*P_function)(const double x));
+  //double Gauss5(double (*P_function)(const double x));
 
 
 
