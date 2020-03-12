@@ -48,12 +48,12 @@ Exercise 3, Section 2.6, Epperson 2013
   d[0] = d[3] = 6.0;
   d[1] = d[2] = 4.0;
 
-  u = new double[n+1];
+  u = new double[n];
   u[0] = u[1] = 1.0;
   u[2] = 2.0;
 
 
-  l = new double[n+1];
+  l = new double[n];
   l[0] = 2.0;
   l[1] = l[2] = 1.0;
 
