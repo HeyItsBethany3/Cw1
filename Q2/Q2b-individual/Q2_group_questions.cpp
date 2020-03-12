@@ -27,6 +27,9 @@ double Gauss5(double (*F_function)(const double x), double (*P_function)(const d
   return sum;
 }
 
+// TODO: Should we not just have another function which multiplies two functionds together?
+
+
 double evaluateF(const double x)
 {
   return(exp(pow(x,2.0)+x) * sin(1.25*M_PI*x)); //TODO double check written right

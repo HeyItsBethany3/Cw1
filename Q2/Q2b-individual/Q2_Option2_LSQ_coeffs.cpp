@@ -90,9 +90,9 @@ void testLegendre()
 }
 
 
-// int main(int argc, char* argv[])
-// {
-//   testLegendre();
-// 
-//   return 0;
-// }
+int main(int argc, char* argv[])
+{
+  testLegendre();
+
+  return 0;
+}
