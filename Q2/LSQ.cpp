@@ -5,8 +5,9 @@
 
 
 LSQ::LSQ(const int num, AbstractFunction& aFunction) {
-  bArray = new double[num];
+  bArray = new double[4];
   cArray = new double[num];
+
   n = num;
   mFunction = &aFunction;
 
@@ -68,10 +69,15 @@ void LSQ::findBGauss3() {
   bArray[3] = LSQ::Gauss3(LSQ::phi_4);
 }
 
+
 // Find B using gauss5 formula
 void LSQ::findBGauss5() {
   bArray[0] = LSQ::Gauss5(LSQ::phi_1);
   bArray[1] = LSQ::Gauss5(LSQ::phi_2);
   bArray[2] = LSQ::Gauss5(LSQ::phi_3);
   bArray[3] = LSQ::Gauss5(LSQ::phi_4);
+}
+
+void LSQ::computeCoefficients() {
+
 }
