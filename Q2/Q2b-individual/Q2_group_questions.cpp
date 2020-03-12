@@ -54,7 +54,7 @@ Parameters: n = order of LSQ approx polynomial q_n
 */
 {
   double *b, *coeffs;
-  b = new double[4];
+  b = new double[n];
   b = calculateB((*F_function), (*Gauss_function));
 
   coeffs = new double[n];
