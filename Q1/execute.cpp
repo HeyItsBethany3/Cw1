@@ -23,24 +23,26 @@ int main(int argc, char* argv[]) {
   (*s1).solveTridiaognal(); // Solves system of equations
   (*s1).showCoeff();
 
+  // Checks spline is exact at interpolating points
   std::cout << "\nSpline at x=0 is " << (*s1).evaluateSpline(0);
   std::cout << "\nf(0) is " << (*f1).evaluateF(0) << std::endl;
 
   std::cout << "\nSpline at x=0.25 is " << (*s1).evaluateSpline(0.25);
   std::cout << "\nf(0.25) is " << (*f1).evaluateF(0.25) << std::endl;
 
-  // Question 1e
-  /*
+  // Checks spline works for other points in interval (0,len)
+
   std::cout << "\nSpline at x=0.3 is " << (*s1).evaluateSpline(0.3);
   std::cout << "\nf(0.3) is " << (*f1).evaluateF(0.3) << std::endl;
-  std::cout << (*s1).error(0.3);
 
   std::cout << "\nSpline at x=0.9 is " << (*s1).evaluateSpline(0.9);
   std::cout << "\nf(0.9) is " << (*f1).evaluateF(0.9) << std::endl;
 
   std::cout << "\nSpline at x=0.1 is " << (*s1).evaluateSpline(0.1);
   std::cout << "\nf(0.1) is " << (*f1).evaluateF(0.1) << std::endl;
-  */
+
+
+  // Question 1e
 
   // Writes to file
   std::ofstream file;
