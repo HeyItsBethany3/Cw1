@@ -19,7 +19,7 @@ void euler(const double theta0, const double alpha,const double T, const int n, 
   }
 
   y[0] = y1;
-  y[1] = y[0];
+  y[1] = y2;
 }
 
 int main(int argc, char* argv[]) {
@@ -32,16 +32,24 @@ int main(int argc, char* argv[]) {
   std::cout << "\ny1: " << yVal[0] << " y2: " << yVal[2] << "\n";
 
   // Testing convergence
+  // TODO: What am I looking for? Are y supposed to tend to 0?
+  // TODO: Why are y1 and y2 the same?
+
   double alpha = 2;
   const double T = 7.4162987092/sqrt(alpha); // final time step
-  int sim = 10;
-  int n = 10;
+  std::cout << "\nInitial values: y1: " << theta0 << " y2: " << 0;
+  int sim = 20;
+  int n = 2;
   std::cout.precision(10);
   for(int i=0; i<sim; i++) {
-    euler(theta0,alpha,T, 100, yVal);
-    std::cout << "\nh: " << T/double(n)<<" y1: " << yVal[0] << " y2: " << yVal[2] << "\n";
+    double* yVal2;
+    yVal2 = new double[2];
+    euler(theta0,alpha,T, n, yVal2);
+    std::cout << "\nh: " << T/double(n)<<" y1: " << yVal2[0] << " y2: " << yVal2[1];
     n= n*2;
+    delete[] yVal2;
   }
+  std::cout << std::endl;
 
 
 
