@@ -46,7 +46,7 @@ Parameters: n = order of LSQ approx polynomial q_n
   Mu_inv_diag[0] = 0.5;
   Mu_inv_diag[1] = 1.5;
   Mu_inv_diag[2] = 2.5;
-  Mu_inv_diag[3] = 9.0;
+  Mu_inv_diag[3] = 3.5;
 
   for(int i=0; i<n; i++)
   {
