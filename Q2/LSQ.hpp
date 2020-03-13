@@ -32,7 +32,12 @@ public:
   // Find 5-pont Gaussian approximation on interval [-1,1] given function f
   double Gauss5(double (*P_function)(const double x));
 
+  // Finds c coefficients (given that b has already been calculated)
   void computeCoefficients();
+
+  void showB(); // shows b vector
+
+  void showC(); // shows c coefficients
 
 
 protected:
