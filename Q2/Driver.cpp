@@ -9,16 +9,24 @@ int main(int argc, char* argv[]) {
 
 
   Function1* f1 = new Function1(); // Initialises function object
-  LSQ* obj1 =  new LSQ(4, *f1); // Initialises least squares problem
-  std::cout <<"\nTest " << (*obj1).phi_2(0.3) << std::endl;
+  LSQ* lsq =  new LSQ(3, *f1); // Initialises least squares problem
 
-  std::cout << (*f1).evaluateF(0.3) << std::endl;
-  (*obj1).findBGauss3();
+  // Using 3-point gauss quadrature
+  std::cout <<"\n3-point Gauss quadrature\n";
+  (*lsq).findBGauss3();
+  (*lsq).computeCoefficients();
+  //(*lsq).showB();
+  (*lsq).showC();
+
+  // Using 5-point gauss quadrature
+  std::cout <<"\n5-point Gauss quadrature\n";
+  (*lsq).findBGauss5();
+  (*lsq).computeCoefficients();
+  (*lsq).showC();
 
 
 
-
-  delete obj1;
+  delete lsq;
   delete f1;
 
   return 0;

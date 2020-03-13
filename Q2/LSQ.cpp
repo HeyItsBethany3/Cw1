@@ -2,12 +2,13 @@
 #include "AbstractFunction.hpp"
 #include <cmath>
 #include <iostream>
+#include <cassert>
 
 
 LSQ::LSQ(const int num, AbstractFunction& aFunction) {
+  assert(num<=4); // n cannot be greater than 4
   bArray = new double[4];
   cArray = new double[num];
-
   n = num;
   mFunction = &aFunction;
 
@@ -78,6 +79,36 @@ void LSQ::findBGauss5() {
   bArray[3] = LSQ::Gauss5(LSQ::phi_4);
 }
 
+// Finds coefficients of the LSQ approx polynomial q_n
 void LSQ::computeCoefficients() {
+  double *Mu_inv_diag; //Vector holding the diagonal values of Mu inverse matrix
 
+  Mu_inv_diag = new double[4];
+
+  // Values were found analytically
+  Mu_inv_diag[0] = 0.5;
+  Mu_inv_diag[1] = 1.5;
+  Mu_inv_diag[2] = 2.5;
+  Mu_inv_diag[3] = 9.0;
+
+  for(int i=0; i<n; i++)
+  {
+    cArray[i] = Mu_inv_diag[i] * bArray[i];
+  }
+
+  delete[] Mu_inv_diag;
+}
+
+void LSQ::showB() {
+  std::cout << "\nB:\n";
+  for (int i=0; i<4; i++) {
+    std::cout << bArray[i] << std::endl;
+  }
+}
+
+void LSQ::showC() {
+  std::cout << "\nC:\n";
+  for (int i=0; i<n; i++) {
+    std::cout << cArray[i] << std::endl;
+  }
 }
