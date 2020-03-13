@@ -11,7 +11,6 @@ LSQ::LSQ(const int num, AbstractFunction& aFunction) {
   cArray = new double[num];
   n = num;
   mFunction = &aFunction;
-
 }
 
 LSQ::~LSQ() {
@@ -69,6 +68,9 @@ void LSQ::findBGauss3() {
   bArray[2] = LSQ::Gauss3(LSQ::phi_3);
   bArray[3] = LSQ::Gauss3(LSQ::phi_4);
 }
+/* Note: you can call a class method within another class method but in order
+to use a function pointer to another class method, that method must be static
+*/
 
 
 // Find B using gauss5 formula
@@ -100,15 +102,15 @@ void LSQ::computeCoefficients() {
 }
 
 void LSQ::showB() {
-  std::cout << "\nB:\n";
-  for (int i=0; i<4; i++) {
-    std::cout << bArray[i] << std::endl;
+  for(int i=0; i<n; i++)
+  {
+    std::cout << "b[" << i+1 << "] = " << bArray[i] << "\n";
   }
 }
 
 void LSQ::showC() {
-  std::cout << "\nC:\n";
-  for (int i=0; i<n; i++) {
-    std::cout << cArray[i] << std::endl;
+  for(int i=0; i<n; i++)
+  {
+    std::cout << "c[" << i+1 << "] = " << cArray[i] << "\n";
   }
 }
