@@ -76,13 +76,32 @@ void LSQ::findBGauss3() {
 to use a function pointer to another class method, that method must be static
 */
 
-
 // Find B using gauss5 formula
 void LSQ::findBGauss5() {
   bArray[0] = LSQ::Gauss5(LSQ::phi_1);
   bArray[1] = LSQ::Gauss5(LSQ::phi_2);
   bArray[2] = LSQ::Gauss5(LSQ::phi_3);
   bArray[3] = LSQ::Gauss5(LSQ::phi_4);
+}
+
+double LSQ::altGauss3(double (*P_function)(const double x)) {
+  double x0, x1, x2;
+
+  x0 = sqrt(3) /sqrt(5);
+  x1 = 0.;
+  x2 = - x0;
+
+  double sum = (8./9.)*(*mFunction).evaluateF(x1)*(*P_function)(x1);
+  sum += (5./9.)*(*mFunction).evaluateF(x0)*(*P_function)(x0);
+  sum += (5./9.)*(*mFunction).evaluateF(x2)*(*P_function)(x2);
+  return sum;
+
+}
+void LSQ::altFindBGauss3() {
+  bArray[0] = LSQ::altGauss3(LSQ::phi_1);
+  bArray[1] = LSQ::altGauss3(LSQ::phi_2);
+  bArray[2] = LSQ::altGauss3(LSQ::phi_3);
+  bArray[3] = LSQ::altGauss3(LSQ::phi_4);
 }
 
 // Finds coefficients of the LSQ approx polynomial q_n
@@ -154,6 +173,6 @@ double LSQ::errorNorm(const int nodes) {
     error = fabs(q-exact);
     norm += pow(error, 2);
   }
-  
+
   return sqrt(norm);
 }

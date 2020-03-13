@@ -29,6 +29,10 @@ double Gauss5(double (*function)(const double x, const int n), const int n) {
   return sum;
 }
 
+// Function prototypes
+double f(const double x, const int n);
+double Gauss3(double (*function)(const double x, const int n), const int n);
+double Gauss5(double (*function)(const double x, const int n), const int n);
 
 // TODO: will Gauss work for other functions?
 int main(int argc, char* argv[]) {
