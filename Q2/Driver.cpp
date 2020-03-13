@@ -3,8 +3,6 @@
 #include "AbstractFunction.hpp"
 #include <iostream>
 
-
-
 int main(int argc, char* argv[]) {
 
   // Part c and d
