@@ -7,6 +7,7 @@
 
 int main(int argc, char* argv[]) {
 
+  // Part c and d
 
   Function1* f1 = new Function1(); // Initialises function object
   LSQ* lsq =  new LSQ(4, *f1); // Initialises least squares problem
@@ -32,6 +33,8 @@ int main(int argc, char* argv[]) {
   std::cout << "f(0.2):\t" << (*f1).evaluateF(0.2)<< std::endl;
   std::cout << "Error norm: " << (*lsq2).errorNorm(100)<< std::endl;
 
+  // Part e
+
   // Calculate error norms for n=1,2,3,4
   int sim = 100;
   for(int i=1; i<=4; i++) {
@@ -45,8 +48,6 @@ int main(int argc, char* argv[]) {
     delete f2;
   }
   std::cout << std::endl;
-
-
 
 
   delete lsq;
