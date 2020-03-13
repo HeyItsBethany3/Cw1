@@ -32,6 +32,11 @@ public:
   // Find 5-pont Gaussian approximation on interval [-1,1] given function f
   double Gauss5(double (*P_function)(const double x));
 
+  // ----- Alternative methods ------
+  // Alternative 3-point gaussian method
+  double altGauss3(double (*P_function)(const double x));
+  void altFindBGauss3();
+
 
   // Finds c coefficients (given that b has already been calculated)
   void computeCoefficients();
