@@ -40,15 +40,20 @@ public:
 
   void showC(); // shows c coefficients
 
+  // evaluate least squares approximation q_n at point x
+  double evaluateQ(const double x);
+
+  // Finds an L2 error norm approximation by discretising interval x_k
+  double errorNorm(const int nodes); // nodes+1 = number of discretisation points
+
 
 protected:
 
   int n;  // Order of LSQ approx polynomial q_n
 
-  double* bArray; // Vector of <f, p> terms
-  double* cArray; // Vector of c coefficients
-
-
+  double* bArray; // Vector of <f, p> terms (length 4)
+  double* cArray; // Vector of c coefficients (length n)
+  double* cFull; // Complete vector of c coefficients (length 4)
   AbstractFunction* mFunction;
 
 
