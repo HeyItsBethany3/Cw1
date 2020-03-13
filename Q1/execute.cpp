@@ -23,6 +23,12 @@ int main(int argc, char* argv[]) {
   (*s1).solveTridiaognal(); // Solves system of equations
   (*s1).showCoeff();
 
+/*
+  // Same checks for Ioanna's method
+  (*s1).solveMethod2();
+  (*s1).showCoeff();
+*/
+
   // Checks spline is exact at interpolating points
   std::cout << "\nSpline at x=0 is " << (*s1).evaluateSpline(0);
   std::cout << "\nf(0) is " << (*f1).evaluateF(0) << std::endl;

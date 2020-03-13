@@ -128,7 +128,47 @@ void Spline::solveTridiaognal() {
 
 void Spline::solveMethod2() {
 
-  std::cout << "Not implemented yet!";
+  // Modified slightly to work for class
+
+  char flag = 't';
+  double* helper = new double[mN];
+  double* helper2 = new double[mN];
+
+
+  // elimination step
+  for(int i=1; i<=mN; i++)
+      {
+          helper[i] -= mUpper[i-1] * (mLower[i] / mDiag[i-1]);
+          helper2[i] -= mFvec[i-1] * (mLower[i] / mDiag[i-1]);
+          if(helper[i] == 0)
+          {
+              flag = 'f';
+              break;
+          }
+      }
+
+  if(flag == 't')
+  {
+      // backsolve step
+      mCoeff[mN] = helper2[mN]/helper[mN];
+      mFullC[mN+1]=mCoeff[mN];
+      for(int i=mN-1; i>=0; i--)
+          {
+              mCoeff[i] = (helper2[i] - mUpper[i] * mCoeff[i+1]) / helper[i];
+              mFullC[i+1] = mCoeff[i];
+          }
+  }
+
+  else
+  {
+      std::cout << "d = 0" << "\n";
+  }
+
+  mFullC[0] = mCoeff[1]-(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[0]);
+  mFullC[mN+2] =mCoeff[mN-1]+(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[mN]);
+
+  delete[] helper;
+  delete[] helper2;
 
 }
 
