@@ -3,64 +3,85 @@
 #include "Function2.hpp"
 #include "AbstractFunction.hpp"
 #include <iostream>
+#include <string>
 
-int main(int argc, char* argv[]) {
+// quadrature: gauss method to use, n is order to approximate
+void showCoefficients(AbstractFunction* funct, const int n,  std::string quadrature) {
+    LSQ* lsq =  new LSQ(n, *funct); // Initialises least squares problem
+    std::cout << "\nLeast squares approximation q_" << n << " using quadrature ";
+    std::cout << quadrature  << "\n";
+    if (quadrature=="Gauss3") {
+        (*lsq).findBGauss3();
+    }
+    else if (quadrature == "Gauss5") {
+        (*lsq).findBGauss5();
+    }
+    else if (quadrature == "altGauss3") {
+        (*lsq).altFindBGauss3();
+    }
+    else if (quadrature == "altGauss5") {
+        (*lsq).altFindBGauss5();
+    }
 
+    (*lsq).computeCoefficients();
+    (*lsq).showC();
 
-  // Part c and d
+    delete lsq;
+}
 
-  Function1* f1 = new Function1(); // Initialises function object
-  LSQ* lsq =  new LSQ(4, *f1); // Initialises least squares problem
-
-  // Using 3-point gauss quadrature
-  std::cout <<"\n3-point Gauss quadrature:\n";
-  (*lsq).findBGauss3();
-  (*lsq).computeCoefficients();
-  //(*lsq).showB();
-  (*lsq).showC();
-
-
-  std::cout << "\nq(0.2):\t" << (*lsq).evaluateQ(0.2)<< std::endl;
-  std::cout << "f(0.2):\t" << (*f1).evaluateF(0.2)<< std::endl;
-  (*lsq).plotQ(100);
-
-
-  // Using 5-point gauss quadrature
-  std::cout <<"\n5-point Gauss quadrature:\n";
-  LSQ* lsq2 =  new LSQ(4, *f1);
-  (*lsq2).findBGauss5();
-  (*lsq2).computeCoefficients();
-  (*lsq2).showC();
-
-  std::cout << "\nq(0.2):\t" << (*lsq2).evaluateQ(0.2)<< std::endl;
-  std::cout << "f(0.2):\t" << (*f1).evaluateF(0.2)<< std::endl;
-  std::cout << "Error norm: " << (*lsq2).errorNorm(100)<< std::endl;
-
-
-  // Same thing repeated using simple function 1+x+x^2
-  //Function* f2 = new Function2();
-
-  // Part e
-
-
-  // Calculate error norms for n=1,2,3,4
-  int sim = 100;
+// Calculates error norms for n=1,2,3,4, sim is the number of discretisation points
+void showError(AbstractFunction* funct, const int sim, std::string quadrature) {
   for(int i=1; i<=4; i++) {
-    Function2* f2 = new Function2(); // Initialises function object
-    LSQ* lsq3 =  new LSQ(i, *f2); //
-    (*lsq3).findBGauss5();
+    LSQ* lsq3 =  new LSQ(i, *funct); //
+    if (quadrature=="Gauss5") {
+        (*lsq3).findBGauss5();
+    }
+    else if (quadrature == "altGauss5") {
+        (*lsq3).altFindBGauss5();
+    }
+
     (*lsq3).computeCoefficients();
     std::cout << "\nError norm for q_" << i << " : " << (*lsq3).errorNorm(sim);
 
     delete lsq3;
-    delete f2;
+
   }
   std::cout << std::endl;
 
+}
 
-  delete lsq;
+// Function prototypes
+void showCoefficients(AbstractFunction* funct, const int n,  std::string quadrature);
+void showError(AbstractFunction* funct, const int sim, std::string quadrature);
+
+int main(int argc, char* argv[]) {
+
+  // Part c and d: for function in question
+  Function1* f1 = new Function1(); // Initialises function object
+  showCoefficients(f1, 4, "Gauss3");   // Using 3-point gauss quadrature
+  showCoefficients(f1, 4, "Gauss5");   // Using 5-point gauss quadrature
+  showCoefficients(f1, 4, "altGauss3");   // 3-point alternative gauss method
+  showCoefficients(f1, 4, "altGauss5");   // 5-point alternative gauss method
+
+  // Part e
+  // Calculate error norms for n=1,2,3,4
+  showError(f1, 100, "Gauss5");
+  showError(f1, 100, "altGauss5");
+  /* We get high errors but this is because the function f(x) is hard to
+  approximate using low order polynomials */
+
+  // Plotting q_4 and f(x) (using matlab script)
+  LSQ* lsq2 =  new LSQ(4, *f1);
+  (*lsq2).findBGauss5();
+  (*lsq2).computeCoefficients();
+  (*lsq2).plotQ(100); // plots Q using 100 discretisation points
+
+  // Repeating part e for the simple function f(x)=1+x+x^2 to prove that the code works
+  Function2* f2 = new Function2();
+  showError(f2, 100, "Gauss5");
+
   delete f1;
-  delete lsq2;
+  delete f2;
 
   return 0;
 }

@@ -38,6 +38,8 @@ public:
   // Alternative 3-point gaussian method
   double altGauss3(double (*P_function)(const double x));
   void altFindBGauss3();
+  double altGauss5(double (*P_function)(const double x));
+  void altFindBGauss5();
 
   // ---------------------------------
 
