@@ -3,6 +3,8 @@
 
 #include "AbstractFunction.hpp"
 
+#include<string>
+
 /* Class for least squares quadrature using the legendre polynomials on the
 interval [-1,1] */
 
@@ -37,6 +39,8 @@ public:
   double altGauss3(double (*P_function)(const double x));
   void altFindBGauss3();
 
+  // ---------------------------------
+
 
   // Finds c coefficients (given that b has already been calculated)
   void computeCoefficients();
@@ -50,6 +54,9 @@ public:
 
   // Finds an L2 error norm approximation by discretising interval x_k
   double errorNorm(const int nodes); // nodes+1 = number of discretisation points
+
+  // plots q values (discretising interval )
+  void plotQ(const int nodes);
 
 
 protected:
