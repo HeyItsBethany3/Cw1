@@ -99,12 +99,27 @@ double LSQ::altGauss3(double (*P_function)(const double x)) {
   return sum;
 
 }
+
+double LSQ::altGauss5(double (*P_function)(const double x)) {
+  return 0; // Need to implement method
+}
+
 void LSQ::altFindBGauss3() {
   bArray[0] = LSQ::altGauss3(LSQ::phi_1);
   bArray[1] = LSQ::altGauss3(LSQ::phi_2);
   bArray[2] = LSQ::altGauss3(LSQ::phi_3);
   bArray[3] = LSQ::altGauss3(LSQ::phi_4);
 }
+
+void LSQ::altFindBGauss5() {
+  bArray[0] = LSQ::altGauss5(LSQ::phi_1);
+  bArray[1] = LSQ::altGauss5(LSQ::phi_2);
+  bArray[2] = LSQ::altGauss5(LSQ::phi_3);
+  bArray[3] = LSQ::altGauss5(LSQ::phi_4);
+}
+
+
+
 
 // Finds coefficients of the LSQ approx polynomial q_n
 void LSQ::computeCoefficients() {
@@ -205,7 +220,5 @@ double LSQ::errorNorm(const int nodes) {
     norm += pow(error, 2);
 
   }
-
-
   return sqrt(norm);
 }
