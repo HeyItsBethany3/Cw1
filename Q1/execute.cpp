@@ -23,10 +23,11 @@ int main(int argc, char* argv[]) {
   (*s1).solveTridiaognal(); // Solves system of equations
   (*s1).showCoeff();
 
+  // Ioanna's method
   Function1* f2 = new Function1(); // Initialises function object
   Spline* s2 = new Spline(len,n,*f2);
-
-  // Ioanna's method
+  (*s2).Nodes(); // Creates nodes
+  (*s2).FindSystem();
   (*s2).solveMethod2();
   (*s2).showCoeff();
 
