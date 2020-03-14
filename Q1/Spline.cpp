@@ -130,7 +130,8 @@ void Spline::solveMethod2() {
 
   // Modified slightly to work for class
 
-  char flag = 't';
+  char flag = 't';]
+  // Creates helper vectors to solve the system
   double* helperD = new double[mN+1];
   double* helperF = new double[mN+1];
 
@@ -148,6 +149,7 @@ void Spline::solveMethod2() {
           helperF[i] -= helperF[i-1] * (mLower[i] / helperD[i-1]);
           if(helperD[i] == 0)
           {
+              // Does not divide by 0
               flag = 'f';
               break;
           }
@@ -180,6 +182,8 @@ void Spline::solveMethod2() {
 
 }
 
+
+// Evaluates the B function (which defines the cubic spline)
 double Spline::evaluateB(const double xstar) {
   double B;
   if ((xstar <= -1)&&(xstar>=-2)) {
@@ -215,7 +219,6 @@ void Spline::showSystem() {
   for (int i=0; i<=mN; i++) {
     std::cout << mFvec[i] << " ";
   }
-  // TODO: Are my f values actually right?
 
   std::cout << "\nd: ";
   for (int i=0; i<=mN; i++) {
@@ -241,7 +244,6 @@ void Spline::showCoeff() {
     std::cout << mCoeff[i] << " ";
   }
 }
-
 
 double Spline::error(const double x) {
   double approx = Spline::evaluateSpline(x);
