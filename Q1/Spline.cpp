@@ -131,16 +131,23 @@ void Spline::solveMethod2() {
   // Modified slightly to work for class
 
   char flag = 't';
-  double* helper = new double[mN];
-  double* helper2 = new double[mN];
+  double* helperD = new double[mN];
+  double* helperF = new double[mN];
+
+  for(int i=0; i<=mN; i++)
+  {
+  helperD[i] = mDiag[i];
+  helperF[i] = mFvec[i];
+  }
+
 
 
   // elimination step
   for(int i=1; i<=mN; i++)
       {
-          helper[i] -= mUpper[i-1] * (mLower[i] / mDiag[i-1]);
-          helper2[i] -= mFvec[i-1] * (mLower[i] / mDiag[i-1]);
-          if(helper[i] == 0)
+          helperD[i] -= mUpper[i-1] * (mLower[i] / helperD[i-1]);
+          helperF[i] -= helperF[i-1] * (mLower[i] / helperD[i-1]);
+          if(helperD[i] == 0)
           {
               flag = 'f';
               break;
@@ -150,11 +157,11 @@ void Spline::solveMethod2() {
   if(flag == 't')
   {
       // backsolve step
-      mCoeff[mN] = helper2[mN]/helper[mN];
+      mCoeff[mN] = helperF[mN]/helperD[mN];
       mFullC[mN+1]=mCoeff[mN];
       for(int i=mN-1; i>=0; i--)
           {
-              mCoeff[i] = (helper2[i] - mUpper[i] * mCoeff[i+1]) / helper[i];
+              mCoeff[i] = (helperF[i] - mUpper[i] * mCoeff[i+1]) / helperD[i];
               mFullC[i+1] = mCoeff[i];
           }
   }
@@ -167,8 +174,8 @@ void Spline::solveMethod2() {
   mFullC[0] = mCoeff[1]-(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[0]);
   mFullC[mN+2] =mCoeff[mN-1]+(double(1)/double(3))*mH*(*mFunction).derivative(mNodes[mN]);
 
-  delete[] helper;
-  delete[] helper2;
+  delete[] helperD;
+  delete[] helperF;
 
 }
 

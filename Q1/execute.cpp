@@ -12,7 +12,6 @@ int main(int argc, char* argv[]) {
   int n = 8;
   double len = 2.0; // So h=1/4
 
-
   Function1* f1 = new Function1(); // Initialises function object
   Spline* s1 = new Spline(len,n,*f1); // Initialises spline object
 
@@ -20,14 +19,16 @@ int main(int argc, char* argv[]) {
   (*s1).FindSystem(); // Finds system of equations
   //(*s1).showSystem();
 
+  // Britta's method
   (*s1).solveTridiaognal(); // Solves system of equations
   (*s1).showCoeff();
 
-/*
-  // Same checks for Ioanna's method
-  (*s1).solveMethod2();
-  (*s1).showCoeff();
-*/
+  Function1* f2 = new Function1(); // Initialises function object
+  Spline* s2 = new Spline(len,n,*f2);
+
+  // Ioanna's method
+  (*s2).solveMethod2();
+  (*s2).showCoeff();
 
   // Checks spline is exact at interpolating points
   std::cout << "\nSpline at x=0 is " << (*s1).evaluateSpline(0);
@@ -37,7 +38,6 @@ int main(int argc, char* argv[]) {
   std::cout << "\nf(0.25) is " << (*f1).evaluateF(0.25) << std::endl;
 
   // Checks spline works for other points in interval (0,len)
-
   std::cout << "\nSpline at x=0.3 is " << (*s1).evaluateSpline(0.3);
   std::cout << "\nf(0.3) is " << (*f1).evaluateF(0.3) << std::endl;
 
@@ -90,7 +90,6 @@ int main(int argc, char* argv[]) {
     file2 << error[i-1] << ",";
   }
 
-
   file.close();
   file2.close();
 
@@ -99,6 +98,8 @@ int main(int argc, char* argv[]) {
 
   delete f1;
   delete s1;
+  delete f2;
+  delete s2;
   delete[] hValue;
   delete[] error;
 
