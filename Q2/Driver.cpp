@@ -1,9 +1,11 @@
 #include "LSQ.hpp"
 #include "Function1.hpp"
+#include "Function2.hpp"
 #include "AbstractFunction.hpp"
 #include <iostream>
 
 int main(int argc, char* argv[]) {
+
 
   // Part c and d
 
@@ -22,7 +24,7 @@ int main(int argc, char* argv[]) {
   std::cout << "f(0.2):\t" << (*f1).evaluateF(0.2)<< std::endl;
   (*lsq).plotQ(100);
 
-/*
+
   // Using 5-point gauss quadrature
   std::cout <<"\n5-point Gauss quadrature:\n";
   LSQ* lsq2 =  new LSQ(4, *f1);
@@ -34,15 +36,17 @@ int main(int argc, char* argv[]) {
   std::cout << "f(0.2):\t" << (*f1).evaluateF(0.2)<< std::endl;
   std::cout << "Error norm: " << (*lsq2).errorNorm(100)<< std::endl;
 
-  delete lsq2;
-*/
+
+  // Same thing repeated using simple function 1+x+x^2
+  //Function* f2 = new Function2();
+
   // Part e
 
-  /*
+
   // Calculate error norms for n=1,2,3,4
   int sim = 100;
   for(int i=1; i<=4; i++) {
-    Function1* f2 = new Function1(); // Initialises function object
+    Function2* f2 = new Function2(); // Initialises function object
     LSQ* lsq3 =  new LSQ(i, *f2); //
     (*lsq3).findBGauss5();
     (*lsq3).computeCoefficients();
@@ -52,10 +56,11 @@ int main(int argc, char* argv[]) {
     delete f2;
   }
   std::cout << std::endl;
-  */
+
 
   delete lsq;
   delete f1;
+  delete lsq2;
 
   return 0;
 }
