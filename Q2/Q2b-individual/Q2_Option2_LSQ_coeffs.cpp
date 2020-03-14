@@ -48,6 +48,7 @@ Parameters: n = order of LSQ approx polynomial q_n
   Mu_inv_diag[2] = 2.5;
   Mu_inv_diag[3] = 3.5;
 
+  //Only calculates the n coefficients for q_n
   for(int i=0; i<n; i++)
   {
     coeffs[i] = Mu_inv_diag[i] * b[i];

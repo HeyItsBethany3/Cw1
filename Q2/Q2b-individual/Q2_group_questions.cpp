@@ -60,6 +60,7 @@ Parameters: n = order of LSQ approx polynomial q_n
   coeffs = new double[n];
   coeffs = solveLSQCoefficients(n, b);
 
+  //Only outputs the n coefficients for q_n
   for(int i=0; i<n; i++)
   {
     std::cout << "c[" << i+1 << "] = " << coeffs[i] << "\n";
