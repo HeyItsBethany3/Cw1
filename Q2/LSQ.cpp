@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 #include <cassert>
+#include <string>
+#include <fstream>
 
 
 LSQ::LSQ(const int num, AbstractFunction& aFunction) {
@@ -44,7 +46,6 @@ double LSQ::phi_4(const double x)
 }
 
 
-
 double LSQ::Gauss3(double (*P_function)(const double x))
 {
   double sum = (double(8)/double(9))*(*mFunction).evaluateF(0)*(*P_function)(0);
@@ -52,7 +53,6 @@ double LSQ::Gauss3(double (*P_function)(const double x))
   sum += (double(5)/double(9))*((*mFunction).evaluateF(xVal)*(*P_function)(xVal)+(*mFunction).evaluateF(-xVal)*(*P_function)(-xVal));
   return sum;
 }
-
 
 double LSQ::Gauss5(double (*P_function)(const double x)) {
   double sum = (double(128)/double(225))*(*mFunction).evaluateF(0)*(*P_function)(0);
@@ -83,6 +83,8 @@ void LSQ::findBGauss5() {
   bArray[2] = LSQ::Gauss5(LSQ::phi_3);
   bArray[3] = LSQ::Gauss5(LSQ::phi_4);
 }
+
+
 
 double LSQ::altGauss3(double (*P_function)(const double x)) {
   double x0, x1, x2;
@@ -149,16 +151,45 @@ double LSQ::evaluateQ(const double x) {
   product[1] = phi_2(x)*cFull[1];
   product[2] = phi_3(x)*cFull[2];
   product[3] = phi_4(x)*cFull[3];
-  //std::cout << "\nphi1: " << phi_1(x) << "\tphi2: "<< phi_2(x) << "\tphi3: " << phi_3(x) << "\tphi4: "<< phi_4(x) << "\n";
+  //std::cout << "\nphi1: " << phi_1(x) << "\nphi2: "<< phi_2(x) << "\nphi3: " << phi_3(x) << "\nphi4: "<< phi_4(x) << "\n";
 
 
   double sum = 0;
   for(int i=0; i<n; i++) {
     sum += product[i];
   }
-
+  //std::cout << "\nproduct1: " << product[0] << "\nproduct2: "<< product[1] << "\nproduct3: " << product[2]<< "\nproduct4: "<< product[3]<< "\n";
   delete[] product;
   return sum;
+}
+
+void LSQ::plotQ(const int nodes) {
+
+  // Writes to file
+  std::ofstream file;
+  file.open("q.csv");
+  assert(file.is_open());
+
+  double x, q, exact, error;
+  file << nodes << ","<<std::endl;
+  double* fvec = new double[nodes+1];
+
+  for (int i=0; i<=nodes; i++) {
+    x =-1.0 +i*(2.0/double(nodes));
+    q = LSQ::evaluateQ(x);
+    fvec[i] = (*mFunction).evaluateF(x);
+    file << q << ",";
+  }
+  file << std::endl;
+
+  for (int i=0; i<=nodes; i++) {
+    file << fvec[i] << ",";
+  }
+  delete[] fvec;
+
+  file.close();
+  std::system("rm ../../../MATLAB/q.csv");
+  std::system("cp q.csv ../../../MATLAB");
 }
 
 double LSQ::errorNorm(const int nodes) {
@@ -172,7 +203,9 @@ double LSQ::errorNorm(const int nodes) {
     exact = (*mFunction).evaluateF(x);
     error = fabs(q-exact);
     norm += pow(error, 2);
+
   }
+
 
   return sqrt(norm);
 }
