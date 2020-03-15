@@ -101,7 +101,25 @@ double LSQ::altGauss3(double (*P_function)(const double x)) {
 }
 
 double LSQ::altGauss5(double (*P_function)(const double x)) {
-  return 0; // Need to implement method
+  double x0, x1, x2, x3, x4;
+  double f0, f1, f2, f3, f4;
+
+  x0 = 0.;
+  x1 = (1./3.) * sqrt(5. - 2. * sqrt(10./7.));
+  x2 = (-1./3.) * sqrt(5. - 2. * sqrt(10./7.));
+  x3 = (1./3.) * sqrt(5. + 2.*sqrt(10./7.));
+  x4 = (-1./3.) * sqrt(5. + 2.*sqrt(10./7.));
+
+  f0 = (*mFunction).evaluateF(x0)*(*P_function)(x0);
+  f1 = (*mFunction).evaluateF(x1)*(*P_function)(x1);
+  f2 = (*mFunction).evaluateF(x2)*(*P_function)(x2);
+  f3 = (*mFunction).evaluateF(x3)*(*P_function)(x3);
+  f4 = (*mFunction).evaluateF(x4)*(*P_function)(x4);
+
+  double sum = ((128./225.) * f0)+ ((322. + 13. * sqrt(70.))/900.) *(f1+f2);
+  sum += ((322. - 13. * sqrt(70.))/900.)*(f3+f4);
+
+  return sum;
 }
 
 void LSQ::altFindBGauss3() {
