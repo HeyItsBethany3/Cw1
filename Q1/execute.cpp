@@ -61,8 +61,9 @@ int main(int argc, char* argv[]) {
   assert(file2.is_open());
 
   // Output to file (table format)
-  file << "h," << "q," << "error" << std::endl;
-  //file << std::scientific;
+  //file.precision(10);
+
+  file << "h," << "q," << "error" <<std::endl;
 
   double xstar = double(1)/double(3);
   int sim = 10; // Change this to get more results
@@ -104,8 +105,8 @@ int main(int argc, char* argv[]) {
   delete s1;
   delete f2;
   delete s2;
-  delete[] hValue;
-  delete[] error;
+  //delete[] hValue;
+  //delete[] error;
 
   return 0;
 }

@@ -10,6 +10,8 @@ figure(1);
 loglog(hvec, error, 'm');
 xlabel('h'); ylabel('Error');
 title('Spline error as step-size h changes for point x=1/3');
+ax = gca; ax.FontSize = 14; axis tight;
+
 
 % Finds gradient of plot
 coefficients = polyfit(log(hvec), log(error), 1);

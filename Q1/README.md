@@ -1,6 +1,6 @@
 For Q1 part 1b, open the folder 'Q1b-individual'. Run the files individually.
-The scripts contain option I ('solveTridiaognal.cpp') and option II
-('completeSpline.cpp') in the form of functions, and they are tested.
+The scripts contain option I ('BrittaSolveTridiaognal.cpp' and 'IoannaSolveTridiagonal')
+and option II ('completeSpline.cpp') in the form of functions, and they are tested.
 
 For the rest of Q1 we have designed a class system. There is an 'AbstractFunction'
 class, from which we have a derived class 'Function1', which implements the
@@ -15,3 +15,7 @@ file.
 Compile and run all the files by using the makefile. Navigate to this directory
 using the terminal and then type 'make'. Use 'make clean' to restore the directory
 back to its original state.
+
+In our 'execute.cpp' file we create a table by outputting data to 'Table.csv'.
+We also output data to 'PlotSpline.csv' which we use to create a plot, by running
+'PlotSpline.m' in our MATLAB working directory.

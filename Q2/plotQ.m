@@ -2,18 +2,26 @@
 value = csvread('q.csv');
 
 % Retrieves q
-qValue = value(1,1:end-1);
 
-f = @(x) (exp((x.^2)+x)*sin(pi*1.25*x));
+num = value(1,1);
+qValue = value(2,1:end-1);
+fValue = value(3,1:end-1);
+
+
+% Analtical f
+f = @(x) (exp((x.^2)+x).*sin(pi.*(5/4).*x));
 
 % Create nodes
-num = 101;
-xNodes = zeros(num);
-h = 2.0/num;
-for i=0:100
+
+xNodes = zeros(1,num+1);
+h = 2/num;
+for i=0:num
     xNodes(i+1) = (-1)+(i*h);
 end
 
-% Creates plot
+% Create plot
 figure(1);
-plot(xNodes, f(xNodes), 'c', xNodes, qValue, 'm');
+plot(xNodes, fValue, 'c', xNodes, qValue, 'm');
+xlabel('x'); legend('f(x)', 'p(x)');
+title("Least squares approximation p(x) to f(x)");
+ax = gca; ax.FontSize = 14; axis tight;

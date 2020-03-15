@@ -52,5 +52,8 @@ int main(int argc, char* argv[]) {
     std::cout << "\t3-point rule: " << Gauss3(f,k);
     std::cout << "\t5-point rule: " << Gauss5(f,k);
   }
+  
+  std::cout << std::endl;
+  
   return 0;
 }
