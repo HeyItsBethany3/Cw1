@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
   // TODO: Why are y1 and y2 the same?
 
   double alpha = 2;
-  const double T = 7.4162987092/sqrt(alpha); // final time step
+  const double T = 7.4162987092/alpha; // final time step
   std::cout << "\nT " << T << "\n";
   std::cout << "\nInitial values: y1: " << theta0 << " y2: " << 0;
   int sim = 20;

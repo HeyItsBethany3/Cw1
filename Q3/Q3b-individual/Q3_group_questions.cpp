@@ -5,7 +5,7 @@
 
 //FUNCTION PROTOTYPE
 double* euler(const double theta0, const double alpha, const double T, const int n, double* y);
-double* newtonMethod(const double* x_initial, const double alpha, const double T, const double h, const int &n,
+double* newtonMethod(const double* x_initial, const double alpha, const double T, const double h, const int &euler_n,
   double* (*InvJ_function)(const double* y_new, const double alpha, const double h),
   double* (*F_function)(const double* y_new, const double* y_old, const double alpha, const double h),
   double* newton_differences, int &k_converge);
@@ -44,7 +44,16 @@ double* euler(const double theta0, const double alpha, const double T, const int
 
     if (i==1 || i == int(T/(4.0*h)) || i == int(T/(2.0*h)))
     {
-      createFiles(i, newton_differences, k_converge);
+      //TODO want to remove prints?
+      for (int j=0; j<k_converge; j++)
+      {
+        std::cout << "  For n = " << i << ", newton_diff[" << j << "] = " << newton_differences[j] << "\n";
+      }
+
+      if (n==32.0)
+      {
+        createFiles(i, newton_differences, k_converge);
+      }
     }
 
     y_old[0] = y_new[0];
@@ -61,7 +70,7 @@ double* euler(const double theta0, const double alpha, const double T, const int
 
 // Britta's Newton
 
-double* newtonMethod(const double* x_initial, const double alpha, const double T, const double h, const int &n,
+double* newtonMethod(const double* x_initial, const double alpha, const double T, const double h, const int &euler_n,
   double* (*InvJ_function)(const double* y_new, const double alpha, const double h),
   double* (*F_function)(const double* y_new, const double* y_old, const double alpha, const double h),
   double* newton_differences, int &k_converge)
@@ -93,7 +102,7 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 
     error = calculateError(x_new, x_old);
 
-    if (n==1 || n == int(T/(4.0*h)) || n == int(T/(2.0*h)))
+    if (euler_n==1 || euler_n == int(T/(4.0*h)) || euler_n == int(T/(2.0*h)))
     {
       newton_differences[k-1] = calculateError(x_new, x_old);
     }
@@ -121,7 +130,7 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 void createFiles(const int n, const double* newton_differences, const int k_converge)
 {
   std::string filename;
-  filename = "Britta_Newton_n=" + std::to_string(n) + ".csv";
+  filename = "Q2d_Britta_Newton_n=" + std::to_string(n) + ".csv";
   std::ofstream myfile;
   myfile.open(filename);
   assert(myfile.is_open());
@@ -129,7 +138,7 @@ void createFiles(const int n, const double* newton_differences, const int k_conv
   for (int j=0; j<k_converge; j++)
   {
     //TODO REMOVE PRINT
-    //std::cout << "newton_diff[" << j << "] = " << newton_differences[j] << "\n";
+    // std::cout << "For n = " << n << ", newton_diff[" << j << "] = " << newton_differences[j] << "\n";
     myfile << j+1 << "," << newton_differences[j] << "\n";
   }
   myfile.close();
@@ -193,14 +202,17 @@ int main(int argc, char* argv[])
   const double theta0 = M_PI/double(2.0); // initial theta value
   const double alpha = 2.0;
   const double T = 8.0;
-  const double h = T/ 32.0;
 
-  const int n = int(T/h);
-
-  y_n = euler(theta0, alpha, T, n);
-  // THINK EULER WILL OUTPUT A VECTOR OF Y_N's NOT JUST THE LAST ROOT
-
-  std::cout << "y_n found: (" << y_n[0] << "," << y_n[1] << ")\n";
+  //Q2e
+  double h = T; //initialise h
+  int n;
+  for (int i=1; i<=20; i++)
+  {
+    h = h/2.0; //Note: this will also check for h=T/32.0 which is needed for Q2d
+    n = int(T/h);
+    std::cout << "\n\nFor h = " << T/double(n) << "\n";
+    y_n = euler(theta0, alpha, T, n);
+  }
 
   return 0;
 }
