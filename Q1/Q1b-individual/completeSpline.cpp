@@ -23,7 +23,6 @@ f (fvalues) and n+1 (length of vectors)
 */
 void findSpline(const double len, const int n, double (*funct)(const double x),
 double (*derivative)(const double x), double *d, double *u, double *l, double *fvec) {
-  //TODO: Do we approximate the derivative f' or use exact?
 
   // Create x values (interpolating points)
   double* x;
@@ -34,38 +33,37 @@ double (*derivative)(const double x), double *d, double *u, double *l, double *f
   }
 
   // Create f(x) using function pointers
-
   for (int i=1; i<n; i++) {
     fvec[i]=(*funct)(x[i]);
   }
   fvec[0]=(*funct)(x[0])+((double(1)/double(3))*h*(*derivative)(x[0]));
   fvec[n]=(*funct)(x[n])-((double(1)/double(3))*h*(*derivative)(x[n]));
 
-
-
   // Find diagonal elements
-
   for (int i=0; i<=n; i++) {
     d[i] = 4;
   }
 
   // Construct upper diagonal elements
-
   u[0]=2;
   for (int i=1; i<n; i++) {
     u[i]=1;
   }
 
   // Construct lower diagonal elements
-
   l[n-1]=2;
   for (int i=0; i<n-1; i++) {
     l[i]=1;
   }
 
   delete[] x;
-
 }
+
+// Function prototypes
+void findSpline(const double len, const int n, double (*funct)(const double x),
+double (*derivative)(const double x), double *d, double *u, double *l, double *fvec);
+double f(const double x);
+double fD(const double x);
 
 
 int main(int argc, char* argv[]) {
@@ -76,6 +74,7 @@ int main(int argc, char* argv[]) {
   d = new double[n+1];
   u = new double[n];
   l = new double[n];
+  // Finds system of equations for spline
   findSpline(2, n, f, fD, d, u, l, fvec);
 
   // Output d, u, l
@@ -92,8 +91,7 @@ int main(int argc, char* argv[]) {
     std::cout << l[i] << " ";
   }
 
-
-
+  // Deallocates storage
   delete[] fvec;
   delete[] d;
   delete[] u;
@@ -101,4 +99,3 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
-// TODO: create header file etc

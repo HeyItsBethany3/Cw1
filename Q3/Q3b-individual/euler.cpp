@@ -23,6 +23,9 @@ void euler(const double theta0, const double alpha,const double T, const int n, 
   y[1] = y2;
 }
 
+// Function prototypes
+void euler(const double theta0, const double alpha,const double T, const int n, double* y);
+
 int main(int argc, char* argv[]) {
 
   // Simple test
@@ -59,7 +62,6 @@ int main(int argc, char* argv[]) {
   // They also converge to the expected values!
 
   delete[] yVal;
-
 
   return 0;
 }

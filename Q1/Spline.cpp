@@ -127,7 +127,6 @@ void Spline::solveTridiaognal() {
   {
     delta[i] = delta[i] - mUpper[i-1]*(mLower[i-1]/delta[i-1]);
     Gvec[i] = Gvec[i] - Gvec[i-1]*(mLower[i-1]/delta[i-1]);
-
   }
 
   //Backsolve
@@ -167,8 +166,9 @@ void Spline::solveMethod2() {
   // elimination step
   for(int i=1; i<=mN; i++)
       {
-          helperD[i] -= mUpper[i-1] * (mLower[i] / helperD[i-1]);
-          helperF[i] -= helperF[i-1] * (mLower[i] / helperD[i-1]);
+          helperD[i] -= mUpper[i-1] * (mLower[i-1] / helperD[i-1]);
+          helperF[i] -= helperF[i-1] * (mLower[i-1] / helperD[i-1]);
+
           if(helperD[i] == 0)
           {
               // Does not divide by 0
@@ -177,6 +177,7 @@ void Spline::solveMethod2() {
           }
 
       }
+
 
   if(flag == 't')
   {

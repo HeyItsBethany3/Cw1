@@ -5,8 +5,6 @@ double* solveTridiaognal(const int n, double *d, double *u, double *l, double *f
 void testExample(double *d, double *u, double *l, double *fvec);
 
 
-
-
 double* solveTridiaognal(const int n, double *d, double *u, double *l, double *fvec)
 /*
 Takes a complete spline tridiagonal system as input and solves it.
