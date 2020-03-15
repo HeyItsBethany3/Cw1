@@ -62,7 +62,7 @@ double* newton(void(*F)(double, double, double*), void(*dF)(double, double, doub
             conv = convergence(x, new_x, root, 2);
             if(conv < 1 || conv == 1)
             {
-                cout << " Newton's order of convergence is indeed quadratic \n";
+                cout << "Newton's order of convergence is indeed quadratic \n";
             }
             else
             {
@@ -73,19 +73,9 @@ double* newton(void(*F)(double, double, double*), void(*dF)(double, double, doub
             x[1] = new_x[1];
             counter++;
 
-            cout << " and the updated root guess is: " << x[0] << " and " << x[1] << "\n\n";
+            cout << "and the updated root guess is: (" << x[0] << ", " << x[1] << ")\n\n";
         }
     while(diff > TOL && counter <= nmax);
-
-    conv = convergence(x, new_x, root, 2);
-    if(conv < 1 || conv == 1)
-    {
-        cout << " Newton's order of convergence is indeed quadratic. \n";
-    }
-    else
-    {
-        cout << " Wrong convergence. \n";
-    }
 
     delete[] x;
     delete[] update;
@@ -182,6 +172,7 @@ double convergence(double* x, double* new_x, double* root, int order)
 
 int main(int argc, char* argv[])
 {
+    int counter;
     double TOL = 1e-10;
     double* root;
     root = new double[2];
@@ -193,7 +184,7 @@ int main(int argc, char* argv[])
     x0[1] = 2.;
 
     root = newton(F, dF, x0, TOL);
-    cout << " Finally, Newton's root is: ("<< root[0] << ", "<< root[1] << ") \n";
+    cout << "Finally, after " << counter << " iterations, Newton's root is: ("<< root[0] << ", "<< root[1] << ") \n";
 
     return 0;
 }
