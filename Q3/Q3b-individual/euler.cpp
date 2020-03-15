@@ -45,10 +45,12 @@ int main(int argc, char* argv[]) {
     double* yVal2;
     yVal2 = new double[2];
     euler(theta0,alpha,T, n, yVal2);
+   
     // Output approximations found
     std::cout << "\nh: " << T/double(n)<<"\ty1: " << yVal2[0] << "\ty2: " << yVal2[1];
     // Double n each time (halve h)
     n=n*2;
+
     delete[] yVal2;
   }
     std::cout << std::endl;
