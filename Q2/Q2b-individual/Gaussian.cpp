@@ -26,7 +26,9 @@ double Gauss5(double (*function)(const double x, const int n), const int n) {
   double w2 = double(322-13*double(sqrt(70)))/double(900);
   sum += w1*((*function)(xVal,n)+(*function)(-xVal,n));
   sum += w2*((*function)(xVal2,n)+(*function)(-xVal2,n));
+
   return sum;
+
 }
 
 // Function prototypes
