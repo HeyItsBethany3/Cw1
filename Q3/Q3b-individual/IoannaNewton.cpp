@@ -17,7 +17,7 @@ double convergence(double* x, double* new_x, double* root, int order);
 double* newton(void(*F)(double, double, double*), void(*dF)(double, double, double**), double* x0, double TOL)
 {
     int counter = 0;
-    int nmax = 10;
+    int nmax = 100;
     double diff;
     double conv;
 
@@ -75,7 +75,7 @@ double* newton(void(*F)(double, double, double*), void(*dF)(double, double, doub
 
             cout << " and the updated root guess is: " << x[0] << " and " << x[1] << "\n\n";
         }
-    while(diff > TOL || counter <= nmax);
+    while(diff > TOL && counter <= nmax);
 
     conv = convergence(x, new_x, root, 2);
     if(conv < 1 || conv == 1)
@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
     x0[1] = 2.;
 
     root = newton(F, dF, x0, TOL);
-    cout << " A Newton's root is: ("<< root[0] << ", "<< root[1] << ") \n";
+    cout << " Finally, Newton's root is: ("<< root[0] << ", "<< root[1] << ") \n";
 
     return 0;
 }
