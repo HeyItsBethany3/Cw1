@@ -172,7 +172,6 @@ double convergence(double* x, double* new_x, double* root, int order)
 
 int main(int argc, char* argv[])
 {
-    int counter;
     double TOL = 1e-10;
     double* root;
     root = new double[2];
@@ -184,7 +183,7 @@ int main(int argc, char* argv[])
     x0[1] = 2.;
 
     root = newton(F, dF, x0, TOL);
-    cout << "Finally, after " << counter << " iterations, Newton's root is: ("<< root[0] << ", "<< root[1] << ") \n";
+    cout << "Finally, Newton's root is: ("<< root[0] << ", "<< root[1] << ") \n";
 
     return 0;
 }
