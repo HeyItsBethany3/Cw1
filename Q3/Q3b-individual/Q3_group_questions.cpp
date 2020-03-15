@@ -42,7 +42,7 @@ double* euler(const double theta0, const double alpha, const double T, const int
   {
     y_new = newtonMethod(y_old, alpha, T, h, i, invJacobi1, func1, newton_differences, k_converge);
 
-    if (i==1)
+    if (i==1 || i == int(T/(4.0*h)) || i == int(T/(2.0*h)))
     {
       createFiles(i, newton_differences, k_converge);
     }
@@ -93,7 +93,7 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 
     error = calculateError(x_new, x_old);
 
-    if (n==1)
+    if (n==1 || n == int(T/(4.0*h)) || n == int(T/(2.0*h)))
     {
       newton_differences[k-1] = calculateError(x_new, x_old);
     }
@@ -121,18 +121,20 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 void createFiles(const int n, const double* newton_differences, const int k_converge)
 {
   std::string filename;
-  filename = "Newton_n=" + std::to_string(n) + ".csv";
+  filename = "Britta_Newton_n=" + std::to_string(n) + ".csv";
   std::ofstream myfile;
   myfile.open(filename);
+  assert(myfile.is_open());
   myfile << "k, difference\n";
   for (int j=0; j<k_converge; j++)
   {
-    std::cout << "newton_diff[" << j << "] = " << newton_differences[j] << "\n";
+    //TODO REMOVE PRINT
+    //std::cout << "newton_diff[" << j << "] = " << newton_differences[j] << "\n";
     myfile << j+1 << "," << newton_differences[j] << "\n";
   }
   myfile.close();
-
-    //if (n==1 || n == int(T/(4.0*h)) || n == int(T/(2.0*h)))
+  std::string command = "mv "+filename+" Documents/GitHub/Cw1/Q3/";
+  system(command.c_str());
 }
 
 double calculateError(double* x_new, double* x_old)
