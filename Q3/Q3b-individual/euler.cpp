@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
   const double theta0 = M_PI/double(2.0); // initial theta value
   double* yVal;
   yVal = new double[2];
+
   euler(theta0,2,8,100,yVal);
   std::cout << "\ny1: " << yVal[0] << " y2: " << yVal[2] << "\n";
 

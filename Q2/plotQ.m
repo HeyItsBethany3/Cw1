@@ -2,14 +2,17 @@
 value = csvread('q.csv');
 
 % Retrieves q
+
 num = value(1,1);
 qValue = value(2,1:end-1);
 fValue = value(3,1:end-1);
+
 
 % Analtical f
 f = @(x) (exp((x.^2)+x).*sin(pi.*(5/4).*x));
 
 % Create nodes
+
 xNodes = zeros(1,num+1);
 h = 2/num;
 for i=0:num

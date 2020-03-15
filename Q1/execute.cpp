@@ -65,7 +65,6 @@ int main(int argc, char* argv[]) {
 
   file << "h," << "q," << "error" <<std::endl;
 
-
   double xstar = double(1)/double(3);
   int sim = 10; // Change this to get more results
   double* hValue = new double[sim];
