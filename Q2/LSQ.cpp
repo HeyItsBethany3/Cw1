@@ -6,46 +6,49 @@
 #include <string>
 #include <fstream>
 
-
+// Constructor
 LSQ::LSQ(const int num, AbstractFunction& aFunction) {
   assert(num<=4); // n cannot be greater than 4
-  bArray = new double[4];
-  cArray = new double[num];
-  cFull = new double[4];
-  n = num;
-  mFunction = &aFunction;
+  bArray = new double[4]; // Vector of <f, p> terms where p are the legendre polynomials
+  cArray = new double[num];  // Vector of c coefficients (length n)
+  cFull = new double[4]; // Complete vector of c coefficients (length 4)
+  n = num; // n the degree of the polynomial p to find
+  mFunction = &aFunction; // function f(x) to approximate
 }
 
+// Destructor
 LSQ::~LSQ() {
-
+  // Deallocates storage
   delete[] bArray;
   delete[] cArray;
   delete[] cFull;
-
-  // TODO: delete mFunction?
 }
 
+// First legendre polynomial
 double LSQ::phi_1(const double x)
 {
   return(1.0);
 }
 
+// Second legendre polynomial
 double LSQ::phi_2(const double x)
 {
   return(x);
 }
 
+// Third legendre polynomial
 double LSQ::phi_3(const double x)
 {
   return(0.5*(3.0*pow(x,2)-1));
 }
 
+// Fourth legendre polynomial
 double LSQ::phi_4(const double x)
 {
   return(0.5*(5.0*pow(x,3) - 3.0*x));
 }
 
-
+// Find 3-pont Gaussian approximation on interval [-1,1] given function f
 double LSQ::Gauss3(double (*P_function)(const double x))
 {
   double sum = (double(8)/double(9))*(*mFunction).evaluateF(0)*(*P_function)(0);
@@ -54,6 +57,7 @@ double LSQ::Gauss3(double (*P_function)(const double x))
   return sum;
 }
 
+// Find 5-pont Gaussian approximation on interval [-1,1] given function f
 double LSQ::Gauss5(double (*P_function)(const double x)) {
   double sum = (double(128)/double(225))*(*mFunction).evaluateF(0)*(*P_function)(0);
   double xVal = (double(1)/double(3))*sqrt(5.0-(2.0*sqrt(double(10)/double(7))));
@@ -85,7 +89,7 @@ void LSQ::findBGauss5() {
 }
 
 
-
+// Alternative 3-point gaussian method
 double LSQ::altGauss3(double (*P_function)(const double x)) {
   double x0, x1, x2;
 
@@ -100,6 +104,7 @@ double LSQ::altGauss3(double (*P_function)(const double x)) {
 
 }
 
+// Alternative 5-point gaussian method
 double LSQ::altGauss5(double (*P_function)(const double x)) {
   double x0, x1, x2, x3, x4;
   double f0, f1, f2, f3, f4;
@@ -122,6 +127,7 @@ double LSQ::altGauss5(double (*P_function)(const double x)) {
   return sum;
 }
 
+// Calculates bArray using 'altGauss3'
 void LSQ::altFindBGauss3() {
   bArray[0] = LSQ::altGauss3(LSQ::phi_1);
   bArray[1] = LSQ::altGauss3(LSQ::phi_2);
@@ -129,6 +135,7 @@ void LSQ::altFindBGauss3() {
   bArray[3] = LSQ::altGauss3(LSQ::phi_4);
 }
 
+// Calculates bArray using 'altGauss5'
 void LSQ::altFindBGauss5() {
   bArray[0] = LSQ::altGauss5(LSQ::phi_1);
   bArray[1] = LSQ::altGauss5(LSQ::phi_2);
@@ -137,12 +144,9 @@ void LSQ::altFindBGauss5() {
 }
 
 
-
-
 // Finds coefficients of the LSQ approx polynomial q_n
 void LSQ::computeCoefficients() {
   double *Mu_inv_diag; //Vector holding the diagonal values of Mu inverse matrix
-
   Mu_inv_diag = new double[4];
 
   // Values were found analytically
@@ -151,18 +155,18 @@ void LSQ::computeCoefficients() {
   Mu_inv_diag[2] = 2.5;
   Mu_inv_diag[3] =double(7)/double(2);
 
-
   for(int i=0; i<4; i++) {
-    cFull[i] = Mu_inv_diag[i] * bArray[i];
+    cFull[i] = Mu_inv_diag[i] * bArray[i]; // Finds all c values
   }
   for(int i=0; i<n; i++)
   {
-    cArray[i] = cFull[i];
+    cArray[i] = cFull[i]; // Only necessary c values are used
   }
 
   delete[] Mu_inv_diag;
 }
 
+// Displays bArray vector
 void LSQ::showB() {
   for(int i=0; i<n; i++)
   {
@@ -170,6 +174,7 @@ void LSQ::showB() {
   }
 }
 
+// Displays coefficients cArray
 void LSQ::showC() {
   for(int i=0; i<n; i++)
   {
@@ -177,66 +182,74 @@ void LSQ::showC() {
   }
 }
 
+// Evaluates q_n at point x on interval [-1,1]
 double LSQ::evaluateQ(const double x) {
 
   double* product = new double[4];
+  // All products are calculated
   product[0] = phi_1(x)*cFull[0];
   product[1] = phi_2(x)*cFull[1];
   product[2] = phi_3(x)*cFull[2];
   product[3] = phi_4(x)*cFull[3];
-  //std::cout << "\nphi1: " << phi_1(x) << "\nphi2: "<< phi_2(x) << "\nphi3: " << phi_3(x) << "\nphi4: "<< phi_4(x) << "\n";
 
-
+  // Only necessary products are used depending on n
   double sum = 0;
   for(int i=0; i<n; i++) {
     sum += product[i];
   }
-  //std::cout << "\nproduct1: " << product[0] << "\nproduct2: "<< product[1] << "\nproduct3: " << product[2]<< "\nproduct4: "<< product[3]<< "\n";
+
   delete[] product;
   return sum;
 }
 
+/* Outputs 'nodes', q and f to a file, which is then used to plot q_n against
+f(x) using a matlab script 'plotQ.m'.
+*/
 void LSQ::plotQ(const int nodes) {
 
   // Writes to file
   std::ofstream file;
   file.open("q.csv");
-  assert(file.is_open());
+  assert(file.is_open()); // Checks file opened correctly
 
   double x, q, exact, error;
-  file << nodes << ","<<std::endl;
+  file << nodes << ","<<std::endl; // Outputs number of discretisation points
   double* fvec = new double[nodes+1];
 
+  // Creates nodes on [-1,1] (to evaluate p_n and f at)
   for (int i=0; i<=nodes; i++) {
     x =-1.0 +i*(2.0/double(nodes));
     q = LSQ::evaluateQ(x);
     fvec[i] = (*mFunction).evaluateF(x);
-    file << q << ",";
+    file << q << ","; // Outputs q values
   }
   file << std::endl;
 
   for (int i=0; i<=nodes; i++) {
-    file << fvec[i] << ",";
+    file << fvec[i] << ","; // Outputs f values
   }
   delete[] fvec;
 
+  // Closes file and moves file to correct directory for matlab file to be easily run
   file.close();
   std::system("rm ../../../MATLAB/q.csv");
   std::system("cp q.csv ../../../MATLAB");
 }
 
+// Approximates the L2 norm of q_n, by discretising the interval
 double LSQ::errorNorm(const int nodes) {
 
   double x, q, exact, error;
   double norm = 0;
 
+  // Discretises the interval [-1,1] into nodes+1 points
   for (int i=0; i<=nodes; i++) {
     x =-1.0 +i*(2.0/double(nodes));
     q = LSQ::evaluateQ(x);
     exact = (*mFunction).evaluateF(x);
-    error = fabs(q-exact);
+    error = fabs(q-exact); // Finds the error at each point
     norm += pow(error, 2);
 
   }
-  return sqrt(norm);
+  return sqrt(norm); // Outputs L2 norm 
 }
