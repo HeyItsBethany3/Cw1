@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
     yVal2 = new double[2];
     euler(theta0,alpha,T, n, yVal2);
     std::cout << "\nh: " << T/double(n)<<" y1: " << yVal2[0] << " y2: " << yVal2[1];
-    n= n*2;
+    n= n*2; // used to decrease h
     delete[] yVal2;
   }
   std::cout << std::endl;
