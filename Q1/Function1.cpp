@@ -5,12 +5,12 @@
 Function1::Function1() {
 }
 
-// Specifies f(x)
+// Specifies f(x) and evaluates it at point x
 double Function1::evaluateF(double x) {
   return (exp(x)* cos(1.25*M_PI*x));
 }
 
-// Specifies f'(x)
+// Specifies f'(x) and evaluates it at point x
 double Function1::derivative(double x) {
   return (exp(x)*(cos(1.25*M_PI*x)-(1.25*M_PI*sin(1.25*M_PI*x))));
 }

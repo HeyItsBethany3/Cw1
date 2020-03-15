@@ -1,6 +1,8 @@
 #ifndef ABSTRACTFUNCTION
 #define ABSTRACTFUNCTION
 
+/* Class which specifies a function f(x) */
+
 class AbstractFunction {
   public:
     // f(x)

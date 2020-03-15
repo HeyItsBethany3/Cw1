@@ -10,7 +10,6 @@ double Function2::evaluateF(double x) {
   return 1+x+pow(x,2);
 }
 
-
 // Destructor
 Function2::~Function2() {
 

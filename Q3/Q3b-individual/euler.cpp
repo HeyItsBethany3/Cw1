@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
   double* yVal;
   yVal = new double[2];
   // TODO: Is my storage allocation right or is this a bad idea?
-  euler(theta0,2,8, 100, yVal);
+  euler(theta0,2,8,100, yVal);
   std::cout << "\ny1: " << yVal[0] << " y2: " << yVal[2] << "\n";
 
   // Testing convergence
@@ -37,6 +37,7 @@ int main(int argc, char* argv[]) {
 
   double alpha = 2;
   const double T = 7.4162987092/sqrt(alpha); // final time step
+  std::cout << "\nT " << T << "\n";
   std::cout << "\nInitial values: y1: " << theta0 << " y2: " << 0;
   int sim = 20;
   int n = 2;
