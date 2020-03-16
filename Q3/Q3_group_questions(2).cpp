@@ -1,3 +1,6 @@
+
+
+
 #include <iostream>
 #include <cmath>
 #include <fstream>
@@ -215,10 +218,9 @@ int main(int argc, char* argv[])
     n = int(T/h);
     std::cout << "\n\nFor h = " << T/double(n) << "\n";
     y_n = euler(theta0, alpha, T, n);
+
   }
   return 0;
 }
-
-
 
 
