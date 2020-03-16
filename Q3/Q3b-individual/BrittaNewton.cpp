@@ -14,6 +14,15 @@ double* testInvJacobi(const double* x);
 
 double* newtonMethod(const double* x_initial,
   double* (*InvJ_function)(const double* x), double* (*F_function)(const double* x), double &Cmax)
+/*
+Implements Newton's method
+Parameters:
+  x_initial: initial guess for the root
+  InvJ_function pointer: calculates a vector of entries for the inverse jacobian evaluated at the given x vector
+  F_function point: calculates the Newton F(x) function evaluated at given x vector
+Returns:
+  The root found from Newton's method
+*/
 {
   double *x_new, *x_old;
   x_new = new double[2];
@@ -28,10 +37,10 @@ double* newtonMethod(const double* x_initial,
 
   double C; // quadratic convergence constant for this iteration
 
-  double error = 1.0; // Arbitrary initialisation
+  double error = 1.0; // arbitrary initialisation
   const double TOL = 1e-12;
-  int k = 1; // Counter for number of Netwon iterations
-  int kmax = 10;
+  int k = 1; // counter for number of Netwon iterations
+  int kmax = 10; // max number of Newton iterations
 
   while (error > TOL && k <= kmax)
   {
@@ -43,8 +52,8 @@ double* newtonMethod(const double* x_initial,
 
     error = calculateError(x_new, x_old);
 
-    // Finds quadratic convergence constant for this whole example
     C = verifyConvergence(x_new, x_old);
+    // Finds quadratic convergence constant for this whole example
     if ( C > Cmax)
     {
       Cmax = C;
@@ -52,9 +61,6 @@ double* newtonMethod(const double* x_initial,
 
     x_old[0] = x_new[0];
     x_old[1] = x_new[1];
-
-    //TODO REMOVE PRINT
-    //std::cout << "x_" << k << ": (" << x_new[0] << "," << x_new[1] << ")\n";
 
     k++;
   }
@@ -68,6 +74,9 @@ double* newtonMethod(const double* x_initial,
 
 
 double calculateError(double* x_new, double* x_old)
+/*
+Calculates and returns the norm of the difference between the given x_new and x_old vectors.
+*/
 {
   double error;
   double* error_vector;
@@ -76,7 +85,7 @@ double calculateError(double* x_new, double* x_old)
   error_vector[0] = x_new[0] - x_old[0];
   error_vector[1] = x_new[1] - x_old[1];
 
-  // Error calculated using Euclidean norm
+  // Error calculated using vector 2-norm
   error = sqrt(pow(error_vector[0], 2.0) + pow(error_vector[1], 2.0));
 
   delete[] error_vector;
@@ -99,9 +108,6 @@ Returns convergence constant
   root[0] = root[1] = 1.0;
 
   C = calculateError(x_new, root) / pow(calculateError(x_old, root), 2.0);
-
-  //TODO REMOVE PRINT
-  //std::cout << "\nC = " << C << "\n";
 
   assert((0 <= C) && (C <= 1));
   //Note: since have exact convergence to the root here needed to allow C=0
