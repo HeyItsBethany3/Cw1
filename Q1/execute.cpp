@@ -61,9 +61,9 @@ int main(int argc, char* argv[]) {
   assert(file2.is_open());
 
   // Output to file (table format)
-  //file.precision(10);
 
-  file << "h," << "q," << "error" <<std::endl;
+
+  file << "h," << "q,"  << "error"  <<std::endl;
 
 
   double xstar = double(1)/double(3);
@@ -82,7 +82,9 @@ int main(int argc, char* argv[]) {
     error[i-1] = (*s).error(xstar); // Finds error
     double approx = (*s).evaluateSpline(xstar); // Evaluates q (spline at x)
 
-    file << hValue[i-1] << "," << approx << "," << error[i-1] << std::endl;
+    file << hValue[i-1] << "," << approx << ",";
+    file.precision(15);
+    file << error[i-1] << std::fixed<< std::endl;
     delete s;
   }
 
