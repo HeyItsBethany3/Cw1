@@ -27,7 +27,7 @@ double* euler(const double theta0, const double alpha, const double T, const int
 
   const double h = T/double(n); // step-size
 
-  double *newton_differences; //norms of differences for Question 2d
+  double *newton_differences; //norms of differences for Question 3d
   newton_differences = new double[10]; //creates array of size kmax=10
   int k_converge; //records the number of iterations it takes Newton method to converge
 
@@ -42,7 +42,7 @@ double* euler(const double theta0, const double alpha, const double T, const int
   {
     y_new = newtonMethod(y_old, alpha, T, h, i, invJacobi1, func1, newton_differences, k_converge);
 
-    // Outputs for Question 2e
+    // Outputs for Question 3e
     if (i==1 || i == int(T/(4.0*h)) || i == int(T/(2.0*h)))
     {
       for (int j=0; j<k_converge; j++)
@@ -50,7 +50,7 @@ double* euler(const double theta0, const double alpha, const double T, const int
         std::cout << "  For n = " << i << ", newton_diff[" << j << "] = " << newton_differences[j] << "\n";
       }
 
-      // File outputs for Question 2d
+      // File outputs for Question 3d
       if (n==32.0)
       {
         createFiles(i, newton_differences, k_converge);
@@ -83,9 +83,9 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
     h: constant to be passed into InvJ and F functions
     InvJ_function pointer: calculates a vector of entries for the inverse jacobian evaluated at the given y vector
     F_function point: calculates the Newton F(x) function evaluated at given y vector
-    euler_n: records which euler iteration we are on - used for outputs for Question 2e
-    T: constant, used to identify which euler_n values we want to have outputs for in Question 2e
-    newton_differences: vector to hold the norm of the differences between Netwon iterations for Question 2d
+    euler_n: records which euler iteration we are on - used for outputs for Question 3e
+    T: constant, used to identify which euler_n values we want to have outputs for in Question 3e
+    newton_differences: vector to hold the norm of the differences between Netwon iterations for Question 3d
     k_converge: keeps track of how many iteratations
   Returns:
     The root found from Newton's method
@@ -118,7 +118,7 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 
     error = calculateError(x_new, x_old);
 
-    // Calculates the norm of differences between newton iterations for Question 2d
+    // Calculates the norm of differences between newton iterations for Question 3d
     if (euler_n==1 || euler_n == int(T/(4.0*h)) || euler_n == int(T/(2.0*h)))
     {
       newton_differences[k-1] = calculateError(x_new, x_old);
@@ -143,11 +143,11 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 
 void createFiles(const int n, const double* newton_differences, const int k_converge)
 /*
-Creates output csv files for Question 2d.
+Creates output csv files for Question 3d.
 */
 {
   std::string filename;
-  filename = "Q2d_Britta_Newton_n=" + std::to_string(n) + ".csv";
+  filename = "Q3d_Britta_Newton_n=" + std::to_string(n) + ".csv";
   std::ofstream myfile;
   myfile.open(filename);
   assert(myfile.is_open());
@@ -227,12 +227,12 @@ int main(int argc, char* argv[])
   const double alpha = 2.0;
   const double T = 8.0;
 
-  //Question 2e
+  //Question 3e
   double h = T; //initialise h
   int n;
   for (int i=1; i<=20; i++)
   {
-    h = h/2.0; //Note: this will also check for h=T/32.0 which is needed for Question 2d
+    h = h/2.0; //Note: this will also check for h=T/32.0 which is needed for Question 3d
     n = int(T/h);
     std::cout << "\n\nFor h = " << T/double(n) << "\n";
     y_n = euler(theta0, alpha, T, n);
