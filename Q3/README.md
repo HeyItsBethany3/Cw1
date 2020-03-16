@@ -8,6 +8,7 @@ The first one implements 'BrittaNewton.cpp' and is called 'Q3_group_questions.cp
 This outputs three .csv files for Q3d showing the left hand side of eqn (8) for each iteration 
 of Newton's method at the requested time steps. The csv files are called: 'Q3d_Britta_Newton_n=1.csv', 'Q3d_Britta_Newton_n=8.csv' and 'Q3d_Britta_Newton_n=16.csv'.
 
-The second one implements 'IoannaNewton.cpp'.
+The second one implements 'IoannaNewton.cpp' and is called 'Q3_group_questions(2).cpp'. 
+
 
 
