@@ -9,7 +9,6 @@ double* newtonMethod(void(*F)(double, double, double, double, double*, const dou
  void(*dF)(double, double, double**, const double, const double), double* x0,
  const double alpha, const double T, const double h, const int &n,
  double* newton_differences, int &k_converge);
-// void createFiles(const int n, const double* newton_differences, const int k_converge);
 double** allocate_matrix();
 void deallocate_matrix(double** matrix);
 double* matrixxvector(double** mat, double* vec);
@@ -46,16 +45,16 @@ double* euler(const double theta0, const double alpha, const double T, const int
             {
                 std::cout << "  For n = " << i << ", newton_diff[" << j << "] = " << newton_differences[j] << "\n";
             }
+        }
 
         y_old[0] = y_new[0];
         y_old[1] = y_new[1];
-        }
+    }
 
         delete[] y_old;
         delete[] newton_differences;
 
         return y_new;
-    }
 }
 
 // Newton's method
@@ -65,7 +64,7 @@ double* newtonMethod(void(*F)(double, double, double, double, double*, const dou
  double* newton_differences, int &k_converge)
 {
     int k = 1, nmax = 10;
-    double diff = 1.0, conv;
+    double diff = 1., conv;
     double const TOL = 1e-12;
 
     double *x, * new_x, *update, *Fy, *y;
@@ -82,7 +81,7 @@ double* newtonMethod(void(*F)(double, double, double, double, double*, const dou
     Jacobian = allocate_matrix();
     InvertJacobian = allocate_matrix();
 
-    while(diff > TOL && k <= nmax);
+    while(diff > TOL && k <= nmax)
         {
             dF(x[0], x[1], Jacobian, alpha, h);
             F(x[0], x[1], y[0], y[1], Fy, alpha, h);
@@ -197,25 +196,6 @@ double norm(double a, double b)
     return pow((pow(a, 2.) + pow(b, 2.)), 0.5);
 }
 
-/*
-void createFiles(const int n, const double* newton_differences, const int k_converge)
-{
-  std::string filename;
-  filename = "Ioanna_Newton_n=" + std::to_string(n) + ".csv";
-  std::ofstream myfile;
-  myfile.open(filename);
-  assert(myfile.is_open());
-  myfile << "k, difference\n";
-  for (int j=0; j<k_converge; j++)
-  {
-    std::cout << "newton_diff[" << j << "] = " << newton_differences[j] << "\n";
-    myfile << j+1 << "," << newton_differences[j] << "\n";
-  }
-  myfile.close();
-  std::string command = "mv "+filename+" Documents/GitHub/Cw1/Q3/";
-  system(command.c_str());
-}
-*/
 
 int main(int argc, char* argv[])
 {
@@ -238,5 +218,7 @@ int main(int argc, char* argv[])
   }
   return 0;
 }
+
+
 
 
