@@ -1,7 +1,16 @@
 #include <iostream>
 #include <cmath>
 
-//TODO function prototypes
+//FUNCTION PROTOTYPE
+double phi_1(const double x);
+double phi_2(const double x);
+double phi_3(const double x);
+double phi_4(const double x);
+
+double* solveLSQCoefficients(const int n, const double* b);
+void evaluateLegendre(double (*legendre)(double x));
+void testLegendre();
+
 
 //Legendre Polynomials
 
@@ -33,7 +42,9 @@ double phi_4(const double x)
 double* solveLSQCoefficients(const int n, const double* b)
 /*
 Returns the coefficients of the LSQ approx polynomial q_n
-Parameters: n = order of LSQ approx polynomial q_n
+Parameters:
+  n: order of LSQ approx polynomial q_n
+  b: b vector in the matrix system to solve
 */
 {
   double *Mu_inv_diag; //Vector holding the diagonal values of Mu inverse matrix

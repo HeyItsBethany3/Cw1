@@ -5,7 +5,7 @@
 
 //FUNCTION PROTOTYPE
 double* euler(const double theta0, const double alpha, const double T, const int n, double* y);
-double* newtonMethod(const double* x_initial, const double alpha, const double T, const double h, const int &euler_n,
+double* newtonMethod(const double* x_initial, const double alpha, const double T, const double h, const int euler_n,
   double* (*InvJ_function)(const double* y_new, const double alpha, const double h),
   double* (*F_function)(const double* y_new, const double* y_old, const double alpha, const double h),
   double* newton_differences, int &k_converge);
@@ -27,9 +27,9 @@ double* euler(const double theta0, const double alpha, const double T, const int
 
   const double h = T/double(n); // step-size
 
-  double* newton_differences;
-  newton_differences = new double[10]; //creates array of size kmax
-  int k_converge;
+  double *newton_differences; //norms of differences for Question 2d
+  newton_differences = new double[10]; //creates array of size kmax=10
+  int k_converge; //records the number of iterations it takes Newton method to converge
 
   double *y_old, *y_new;
   y_old = new double[2];
@@ -42,14 +42,15 @@ double* euler(const double theta0, const double alpha, const double T, const int
   {
     y_new = newtonMethod(y_old, alpha, T, h, i, invJacobi1, func1, newton_differences, k_converge);
 
+    // Outputs for Question 2e
     if (i==1 || i == int(T/(4.0*h)) || i == int(T/(2.0*h)))
     {
-      //TODO want to remove prints?
       for (int j=0; j<k_converge; j++)
       {
         std::cout << "  For n = " << i << ", newton_diff[" << j << "] = " << newton_differences[j] << "\n";
       }
 
+      // File outputs for Question 2d
       if (n==32.0)
       {
         createFiles(i, newton_differences, k_converge);
@@ -70,10 +71,25 @@ double* euler(const double theta0, const double alpha, const double T, const int
 
 // Britta's Newton
 
-double* newtonMethod(const double* x_initial, const double alpha, const double T, const double h, const int &euler_n,
+double* newtonMethod(const double* x_initial, const double alpha, const double T, const double h, const int euler_n,
   double* (*InvJ_function)(const double* y_new, const double alpha, const double h),
   double* (*F_function)(const double* y_new, const double* y_old, const double alpha, const double h),
   double* newton_differences, int &k_converge)
+  /*
+  Implements Newton's method
+  Parameters:
+    x_initial: initial guess for the root
+    alpha: constant to be passed into InvJ and F functions
+    h: constant to be passed into InvJ and F functions
+    InvJ_function pointer: calculates a vector of entries for the inverse jacobian evaluated at the given y vector
+    F_function point: calculates the Newton F(x) function evaluated at given y vector
+    euler_n: records which euler iteration we are on - used for outputs for Question 2e
+    T: constant, used to identify which euler_n values we want to have outputs for in Question 2e
+    newton_differences: vector to hold the norm of the differences between Netwon iterations for Question 2d
+    k_converge: keeps track of how many iteratations
+  Returns:
+    The root found from Newton's method
+  */
 {
   double *x_new, *x_old, *y_old;
   x_new = new double[2];
@@ -90,7 +106,7 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
   double error = 1.0; // Arbitrary initialisation
   const double TOL = 1e-12;
   int k = 1; // Counter for number of Netwon iterations
-  int kmax = 10;
+  int kmax = 10; // Max Newton iterations
 
   while (error > TOL && k<=kmax)
   {
@@ -102,6 +118,7 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 
     error = calculateError(x_new, x_old);
 
+    // Calculates the norm of differences between newton iterations for Question 2d
     if (euler_n==1 || euler_n == int(T/(4.0*h)) || euler_n == int(T/(2.0*h)))
     {
       newton_differences[k-1] = calculateError(x_new, x_old);
@@ -109,9 +126,6 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 
     x_old[0] = x_new[0];
     x_old[1] = x_new[1];
-
-    //TODO REMOVE PRINT
-    //std::cout << "x_" << k << ": (" << x_new[0] << "," << x_new[1] << ")\n";
 
     k++;
   }
@@ -128,6 +142,9 @@ double* newtonMethod(const double* x_initial, const double alpha, const double T
 
 
 void createFiles(const int n, const double* newton_differences, const int k_converge)
+/*
+Creates output csv files for Question 2d.
+*/
 {
   std::string filename;
   filename = "Q2d_Britta_Newton_n=" + std::to_string(n) + ".csv";
@@ -137,8 +154,6 @@ void createFiles(const int n, const double* newton_differences, const int k_conv
   myfile << "k, difference\n";
   for (int j=0; j<k_converge; j++)
   {
-    //TODO REMOVE PRINT
-    // std::cout << "For n = " << n << ", newton_diff[" << j << "] = " << newton_differences[j] << "\n";
     myfile << j+1 << "," << newton_differences[j] << "\n";
   }
   myfile.close();
@@ -147,6 +162,9 @@ void createFiles(const int n, const double* newton_differences, const int k_conv
 }
 
 double calculateError(double* x_new, double* x_old)
+/*
+Calculates and returns the norm of the difference between the given x_new and x_old vectors.
+*/
 {
   double error;
   double* error_vector;
@@ -155,7 +173,7 @@ double calculateError(double* x_new, double* x_old)
   error_vector[0] = x_new[0] - x_old[0];
   error_vector[1] = x_new[1] - x_old[1];
 
-  // Error calculated using Euclidean norm
+  // Error calculated using vector 2-norm
   error = sqrt(pow(error_vector[0], 2.0) + pow(error_vector[1], 2.0));
 
   delete[] error_vector;
@@ -165,9 +183,12 @@ double calculateError(double* x_new, double* x_old)
 
 
 
-// Q3 group questions functions
+// Q3 group questions functions - Beth and Britta's functions
 
 double* invJacobi1(const double* y_new, const double alpha, const double h)
+/*
+Returns Inverse Jacobi evaluated at x for Question 3.
+*/
 {
   double* Inv_Jy;
   Inv_Jy = new double[4];
@@ -183,6 +204,9 @@ double* invJacobi1(const double* y_new, const double alpha, const double h)
 }
 
 double* func1(const double* y_new, const double* y_old, const double alpha, const double h)
+/*
+Returns F(x) for Question 3.
+*/
 {
   double* Fy;
   Fy = new double[2];
@@ -203,12 +227,12 @@ int main(int argc, char* argv[])
   const double alpha = 2.0;
   const double T = 8.0;
 
-  //Q2e
+  //Question 2e
   double h = T; //initialise h
   int n;
   for (int i=1; i<=20; i++)
   {
-    h = h/2.0; //Note: this will also check for h=T/32.0 which is needed for Q2d
+    h = h/2.0; //Note: this will also check for h=T/32.0 which is needed for Question 2d
     n = int(T/h);
     std::cout << "\n\nFor h = " << T/double(n) << "\n";
     y_n = euler(theta0, alpha, T, n);
